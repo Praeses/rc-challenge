@@ -85,17 +85,23 @@ class Car {
 	
 		private boolean loop = true;	
 		private String drivingGuide = "TBD";
-		private String input;
+		private String scInput;
 	
 		userInput = new Scanner(System.in);
 		
-		while (input != "exit") {
+		while (scInput != "exit") {
 		
 			do {
 				try {
 					System.out.println(drivingGuide);
-					carY = userInput.next();
-					loop = false;
+					scInput = userInput.next();
+					m = p.matcher(scInput);
+					switch (scInput) {
+						case "north": case "south": case "east": case "west": 
+						steeringWheel(scInput);
+						loop = false;
+						case :
+					}
    				} catch (Exception e) {
    					System.out.println("Error");
    					userInput.nextLine();
@@ -104,6 +110,12 @@ class Car {
    			loop = true;
    		
    		}
+	
+	}
+	
+	private void steeringWheel(String dir) {
+	
+		carDir = dir;
 	
 	}
 
