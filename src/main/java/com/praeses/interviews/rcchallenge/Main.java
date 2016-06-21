@@ -41,11 +41,11 @@ class Car {
 		
 		do {
 			try {
-				System.out.println(startXString);
+				System.out.print(startXString);
 				carX = userInput.nextInt();
 				loop = false;
    			} catch (Exception e) {
-   					System.out.println(intError);
+   					System.out.print(intError);
    					userInput.nextLine();
    			}
    		} while (loop == true);
@@ -53,11 +53,11 @@ class Car {
    		
    		do {
 			try {
-				System.out.println(startYString);
+				System.out.print(startYString);
 				carY = userInput.nextInt();
 				loop = false;
    			} catch (Exception e) {
-   					System.out.println(intError);
+   					System.out.print(intError);
    					userInput.nextLine();
    			}
    		} while (loop == true);
@@ -65,14 +65,14 @@ class Car {
    		
    		do {
 			try {
-				System.out.println(startDirString);
+				System.out.print(startDirString);
 				carDir = userInput.next();
 				switch (carDir) {
 					case "north": case "south": case "east": case "west": 
 					loop = false;
 				}
    			} catch (Exception e) {
-   					System.out.println(dirError);
+   					System.out.print(dirError);
    					userInput.nextLine();
    			}
    		} while (loop == true);
@@ -93,17 +93,18 @@ class Car {
 		
 			do {
 				try {
-					System.out.println(drivingGuide);
+					System.out.print(drivingGuide);
 					scInput = userInput.next();
-					m = p.matcher(scInput);
 					switch (scInput) {
 						case "north": case "south": case "east": case "west": 
 						steeringWheel(scInput);
 						loop = false;
-						case :
+						case "help":
+						System.out.print(drivingGuide);
+						loop = false;
 					}
    				} catch (Exception e) {
-   					System.out.println("Error");
+   					System.out.print("Error");
    					userInput.nextLine();
    				}
    			} while (loop == true);
