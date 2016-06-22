@@ -27,7 +27,7 @@ class Car {
 	String intError = "Please enter an integer!";
 	String dirError = "Must be north, south, east, or west!";
 	String badCom = "Unrecognized Command. Type 'help' for guidance.";
-	Scanner scInput;
+	static Scanner scInput;
 
 	Car() {
 		
@@ -80,7 +80,7 @@ class Car {
    			}
    		} while (loop == true);
    		
-   		scInput.close();
+   		//scInput.close();
 
 	}
 	
@@ -89,124 +89,124 @@ class Car {
 		boolean loop = true;
 		boolean loopB = true;	
 		String drivingGuide = "TBD";
-		String delimit = "[,]";
-		String userInput = "init";
-		String[] userInputArray;	
+		String delimit = ",";
+		String userInput = "init";	
 		int arrayLength;
 		int temp;
-		
-		scInput = new Scanner(System.in);
 		
 		do {
 			do {
 				try {
-				System.out.println("Drive!");
-				userInput = scInput.nextLine();
-				System.out.println("test");
-				loop = false;
+					scInput.nextLine();
+					System.out.println("Drive!");
+					userInput = scInput.next();
+					loop = false;
 				} catch (Exception e) {
-				System.out.print("error");
-				scInput.nextLine();
+					System.out.println("error");
+					scInput.nextLine();
 				}
 				
 			} while (loop == true);
 			
-			userInputArray = userInput.split(delimit);		
-			arrayLength = userInputArray.length;
+			List<String> userInputList = Arrays.asList(userInput.split("\\s*,\\s*"));		
+			arrayLength = userInputList.size();
+			System.out.println("ArrayList size: " + arrayLength);
+			
+			if (arrayLength < 2) {
+			
+				
+			
+			}
 		
 			for (int i = 0; i < arrayLength; i++) {
-				userInputArray[i] = userInputArray[i].trim();
+				System.out.println("ArrayList index of " + i + " is: " + ":" + userInputList.get(i) + ":");
 			}
 		
 		
 			if (arrayLength == 3) {				
 				
-				if (isInteger(userInputArray[1], 10) == true && isInteger(userInputArray[2], 10) == true) {
+				if (isInteger(userInputList.get(1), 10) == true && isInteger(userInputList.get(2), 10) == true) {
 				
-					steeringWheel(userInputArray[0]);
-					transmission(Integer.parseInt(userInputArray[1]));
-					gasPedal(Integer.parseInt(userInputArray[2]));
+					steeringWheel(userInputList.get(0));
+					transmission(Integer.parseInt(userInputList.get(1)));
+					gasPedal(Integer.parseInt(userInputList.get(2)));
 					
 				} else {
 				
-					System.out.println(badCom);
+					System.out.println("failThree: " + badCom);
 				
 				}
 				
 			} else if (arrayLength == 2) {
 			
-				if (userInputArray[0] == "gear" && isInteger(userInputArray[1],10)) {
+				if (userInputList.get(0).equals("gear") == true && isInteger(userInputList.get(1),10)) {
 				
-					transmission(Integer.parseInt(userInputArray[1]));
+					transmission(Integer.parseInt(userInputList.get(1)));
 					
 				} else {
 				
-					System.out.println(badCom);
+					System.out.println("failTwo: " + badCom);
 				
 				}
 				
 			} else if (arrayLength == 1) {
 			
-				if (userInputArray[0] == "north" || userInputArray[0] == "south" || userInputArray[0] == "east" || userInputArray[0] == "west") {
+				if (userInputList.get(0).equals("north") == true || userInputList.get(0).equals("south") == true || userInputList.get(0).equals("east") == true || userInputList.get(0).equals("west") == true) {
 				
-					steeringWheel(userInputArray[0]);
+					steeringWheel(userInputList.get(0));
 					
-				} else if (isInteger(userInputArray[0], 10) == true) {
+				} else if (isInteger(userInputList.get(0), 10) == true) {
 				
-					gasPedal(Integer.parseInt(userInputArray[0]));
+					gasPedal(Integer.parseInt(userInputList.get(0)));
 					
-				} else if (userInputArray[0] == "help") {
+				} else if (userInputList.get(0).equals("help") == true) {
 				
-					System.out.print(drivingGuide);
+					System.out.println(drivingGuide);
 					
-				} else if (userInputArray[0] == "exit") {
+				} else if (userInputList.get(0).equals("exit") == true) {
 				
 					loopB = false;
 					
-				} else if (userInputArray[0] == "around the block") {
+				} else if (userInputList.get(0).equals("around the block") == true) {
 				
-				} else if (userInputArray[0] == "find obstacle") {
+				} else if (userInputList.get(0).equals("find obstacle") == true) {
 			
 				} else {
 				
-					System.out.println(badCom);
+					System.out.println("failOne: " + badCom);
 				
 				}
 				
 			} else {
 			
-				System.out.println(badCom);
+				System.out.println("fail: " + badCom);
 			
 			}
 			
+			dashboard();
+			
 		} while (loopB == true);
 		
-		scInput.close();
-	
 	}
 	
 	private void steeringWheel(String dir) {
 	
 		carDir = dir;
-		
-		System.out.println("Car is now facing " + carDir + ".");
 	
 	}
 	
 	private void transmission(int shifter) {
 	
-	carGear = shifter;
-	
-	System.out.println("Car is now in gear " + carGear + ".");
+		carGear = shifter;
 	
 	}
 	
 	private void gasPedal(int distance) {
 	
-		int newCarX = 0;
-		int newCarY = 0;
+		int newCarX = carX;
+		int newCarY = carY;
 	
-		if (carDir == "north") {
+		if (carDir.equals("north") == true) {
 		
 			if (carGear > 0) {
 				newCarY = carY - distance;
@@ -214,7 +214,7 @@ class Car {
 				newCarY = carY + distance;
 			}
 		
-		} else if (carDir == "south") {
+		} else if (carDir.equals("south") == true) {
 		
 			if (carGear > 0) {
 				newCarY = carY + distance;
@@ -222,28 +222,34 @@ class Car {
 				newCarY = carY - distance;
 			}
 		
-		} else if (carDir == "east") {
+		} else if (carDir.equals("east") == true) {
 		
 			if (carGear > 0) {
-				newCarX = carY + distance;
+				newCarX = carX + distance;
 			} else if (carGear < 0) {
-				newCarX = carY - distance;
+				newCarX = carX - distance;
 			}
 		
-		} else if (carDir == "west") {
+		} else if (carDir.equals("west") == true) {
 		
 			if (carGear > 0) {
-				newCarX = carY - distance;
+				newCarX = carX - distance;
 			} else if (carGear < 0) {
-				newCarX = carY + distance;
+				newCarX = carX + distance;
 			}
 		
 		}
 		
 		carX = newCarX;
 		carY = newCarY;
-		
-		System.out.println("Car location is (" + carX + "," + carY + ").");
+	
+	}
+	
+	private void dashboard() {
+	
+		System.out.println("Location: (" + carX + "," + carY + ")");
+		System.out.println("Facing: " + carDir);
+		System.out.println("Gear: " + carGear);
 	
 	}
 	
