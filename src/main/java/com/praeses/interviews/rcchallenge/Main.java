@@ -16,17 +16,19 @@ public class Main {
 
 class Car {
 
-	public int carX = 0;
-	public int carY = 0;
-	public String carDir = "north";
-	int carGear = 1;
-	int[] gearBox = {-1,1};
-	String startXString = "Please input the starting X Coordinate:";
-	String startYString = "Please input the starting Y Coordinate:";
-	String startDirString = "Please input the starting direction:";
-	String intError = "Please enter an integer!";
-	String dirError = "Must be north, south, east, or west!";
-	String badCom = "Unrecognized Command. Type 'help' for guidance.";
+	public int carX 		= 0;
+	public int carY 		= 0;
+	public String carDir 	= "north";
+	int carGear 			= 1;
+	int[] gearBox			= {-1,1};
+	String startXString		= "Please input the starting X Coordinate:";
+	String startYString 	= "Please input the starting Y Coordinate:";
+	String startDirString 	= "Please input the starting direction:";
+	String startGearString 	= "Please input the starting gear:";
+	String intError 		= "Please enter an integer!";
+	String dirError 		= "Must be north, south, east, or west!";
+	String gearError 		= "Must be -1 or 1";
+	String badCom 			= "Unrecognized Command. Type 'help' for guidance.";
 	static Scanner scInput;
 
 	Car() {
@@ -68,19 +70,36 @@ class Car {
    		
    		do {
    			try {
-			System.out.println(startDirString);
-			carDir = scInput.next();
-			switch (carDir) {
-				case "north": case "south": case "east": case "west": 
-				loop = false;
-			}
+				System.out.println(startDirString);
+				carDir = scInput.next();
+				switch (carDir) {
+					case "north": case "south": case "east": case "west": 
+						loop = false;
+					default:
+						System.out.println(dirError);
+				}
 			} catch (Exception e) {
    				System.out.println(dirError);
    				scInput.nextLine();
    			}
    		} while (loop == true);
+   		loop = true;
    		
-   		//scInput.close();
+   		do {
+   			try {
+				System.out.println(startGearString);
+				carGear = scInput.nextInt();
+				switch (carGear) {
+					case -1: case 1: 
+						loop = false;
+					default:
+						System.out.println(gearError);
+				}
+			} catch (Exception e) {
+   				System.out.println(gearError);
+   				scInput.nextLine();
+   			}
+   		} while (loop == true);
 
 	}
 	
