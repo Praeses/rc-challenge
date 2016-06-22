@@ -9,6 +9,15 @@ public class Main {
 
     public static void main(String[] args) {
 		
+		World world = new World();
+		
+		ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
+		for (int i = 0; i < world.getObstacleCount(); i++) {
+		
+			obstacles.add(new Obstacle(Integer.toString(i), world));
+		
+		}
+		
 		Car rcCar = new Car();
 		
     	}
@@ -278,6 +287,124 @@ class Car {
 		if(!input.hasNextInt(baseTen)) return false;
 		input.nextInt(baseTen);
 		return !input.hasNext();
+	
+	}
+
+}
+
+
+class World {
+
+	int sizeX 			= 100;
+	int sizeY 			= 100;
+	int obstacleCount 	= 5;
+	
+	World() {
+	
+		
+	
+	}
+	
+	public int getSizeX() {
+	
+		return sizeX;
+	
+	}
+	
+	public int getSizeY() {
+	
+		return sizeY;
+	
+	}
+	
+	public int getObstacleCount() {
+	
+		return obstacleCount;
+	
+	}
+	
+	
+
+}
+
+
+class Obstacle {
+
+	int centroidX;
+	int centroidY;
+	int width;
+	int height;
+	String name;
+	boolean found = false;
+	
+	Obstacle(String nameP, World world) {
+	
+		Random random = new Random();
+		
+		width = random.nextInt(5 + 1);
+		height = random.nextInt(5 + 1);
+		
+		if (width % 2 == 0 ) {
+		
+			width++;
+			
+		}
+		
+		if (height % 2 == 0) {
+		
+			height++;
+			
+		}
+		
+		int bufferX = (width - 1)/2;
+		int bufferY = (height - 1)/2;
+		
+		centroidX = random.nextInt(world.getSizeX() + 1 - bufferX);
+		centroidY = random.nextInt(world.getSizeY() + 1 - bufferX);
+		
+		name = "obstacle" + nameP;
+	
+	}
+	
+	public int getCentroidX() {
+	
+		return centroidX;
+	
+	}
+	
+	public int getCentroidY() {
+	
+		return centroidY;
+	
+	}
+	
+	public int getWidth() {
+	
+		return width;
+	
+	}
+	
+	public int getHeight() {
+	
+		return height;
+	
+	}
+	
+	public String getName() {
+	
+		return name;
+	
+	}
+	
+	public void setName(String nm) {
+	
+		name = nm;
+	
+	}
+	
+	public void setFound() {
+	
+		found = true;
 	
 	}
 
