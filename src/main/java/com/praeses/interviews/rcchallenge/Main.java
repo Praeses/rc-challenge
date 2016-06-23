@@ -34,8 +34,8 @@ class Car {
 	public String heading	= "north";
 	public boolean blocked	= false;
 	int[] gearBox			= {-1,1};
-	String startXString		= "Please input the starting X Coordinate:";
-	String startYString 	= "Please input the starting Y Coordinate:";
+	String startXYString		= "Please enter the starting coordinate 'x,y':";
+	String startXYError 	= "Must be integers and formatted 'x,y'!";
 	String startDirString 	= "Please input the starting direction:";
 	String startGearString 	= "Please input the starting gear:";
 	String intError 		= "Please enter an integer!";
@@ -46,41 +46,61 @@ class Car {
 
 	Car(World world, ArrayList<Obstacle> obstacles) {
 		
-		ignition();
+		ignition(world);
 		driverSeat(world, obstacles);
 		
 	}
 	
-	private void ignition() {
+	private void ignition(World world) {
 		
 		boolean loop = true;
+		boolean loopB = true;
+		int arrayLength = 0;
+		String userInput = "init";
 		setHeading();
 		
 		scInput = new Scanner(System.in);
 		
 		do {
-			try {
-				System.out.println(startXString);
-				carX = scInput.nextInt();
-				loop = false;
-   			} catch (Exception e) {
-   					System.out.println(intError);
-   					scInput.nextLine();
-   			}
-   		} while (loop == true);
-   		loop = true;
+			do {
+				try {
+					System.out.println(startXYString);
+					userInput = scInput.next();
+					loop = false;
+   				} catch (Exception e) {
+   						System.out.println(startXYError);
+   						scInput.nextLine();
+   				}
+   			} while (loop == true);
+   			loop = true;
    		
-   		do {
-			try {
-				System.out.println(startYString);
-				carY = scInput.nextInt();
-				loop = false;
-   			} catch (Exception e) {
-   					System.out.println(intError);
-   					scInput.nextLine();
-   			}
-   		} while (loop == true);
-   		loop = true;
+   			List<String> userInputList = Arrays.asList(userInput.split("\\s*,\\s*"));		
+			arrayLength = userInputList.size();
+			System.out.println("ArrayList size: " + arrayLength);
+		
+			if (arrayLength == 2 && isInteger(userInputList.get(0),10) && isInteger(userInputList.get(1),10)) {
+		
+				carX = Integer.parseInt(userInputList.get(0));
+				carY = Integer.parseInt(userInputList.get(1));
+				
+				if (world.getSpot(carX, carY).isObstacle() == true) {
+				
+					System.out.println("Obstacle! Try a different spot!");
+				
+				} else {
+				
+					loopB = false;
+				
+				}
+		
+			} else {
+			
+				System.out.println(startXYError);
+			
+			}
+		
+		} while (loopB == true);
+		loopB = true;
    		
    		do {
    			try {
@@ -371,13 +391,13 @@ class World {
 	
 	World() {
 	
-		grid = new Spot[sizeX-1][sizeY-1];
+		grid = new Spot[sizeX][sizeY];
 		
 		for (int i = 1; i < sizeX; i++) {
 		
 			for (int j = 1; j < sizeY; j++) {
 			
-				grid[i-1][j-1] = new Spot(i,j);
+				grid[i][j] = new Spot(i,j);
 				
 			}
 			
@@ -405,7 +425,7 @@ class World {
 	
 	public Spot getSpot(int x, int y) {
 	
-		return grid[x-1][y-1];
+		return grid[x][y];
 	
 	}
 	
@@ -466,6 +486,7 @@ class Obstacle {
 		
 			for (int j = nBound; j <= sBound; j++) {
 		
+				world.getSpot(i,j).setObstacle(true);
 				world.getSpot(i,j).setObstacleName(name);
 				world.getSpot(i,j).setObstacleIndex(ind);
 			
@@ -576,6 +597,12 @@ class Spot {
 	public String getObstacleName() {
 	
 		return obstName;
+	
+	}
+	
+	public void setObstacle(boolean ob) {
+	
+		obst = ob;
 	
 	}
 	
