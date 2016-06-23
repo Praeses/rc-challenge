@@ -14,14 +14,9 @@ public class Main {
 		
 		ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
 		
-		//obstacles.add(new Obstacle(-1, world.getSizeY(), 0, -1));
-		//obstacles.add(new Obstacle(-1, 0, world.getSizeX(), -1));
-		//obstacles.add(new Obstacle(-1, world.getSizeY(), world.getSizeX() + 1, world.getSizeX()));
-		//obstacles.add(new Obstacle(world.getSizeY(), world.getSizeY() + 1, world.getSizeX(), -1));
-		
 		for (int i = 0; i < world.getObstacleCount(); i++) {
 		
-			obstacles.add(new Obstacle(Integer.toString(i), world));
+			obstacles.add(new Obstacle(i, world));
 		
 		}
 		
@@ -37,7 +32,7 @@ class Car {
 	public String carDir 	= "north";
 	int carGear 			= 1;
 	public String heading	= "north";
-	public boolean blocked	= "false";
+	public boolean blocked	= false;
 	int[] gearBox			= {-1,1};
 	String startXString		= "Please input the starting X Coordinate:";
 	String startYString 	= "Please input the starting Y Coordinate:";
@@ -59,6 +54,7 @@ class Car {
 	private void ignition() {
 		
 		boolean loop = true;
+		setHeading();
 		
 		scInput = new Scanner(System.in);
 		
@@ -91,7 +87,8 @@ class Car {
 				System.out.println(startDirString);
 				carDir = scInput.next();
 				switch (carDir) {
-					case "north": case "south": case "east": case "west": 
+					case "north": case "south": case "east": case "west":
+						setHeading();
 						loop = false;
 					default:
 						System.out.println(dirError);
@@ -109,6 +106,7 @@ class Car {
 				carGear = scInput.nextInt();
 				switch (carGear) {
 					case -1: case 1: 
+						setHeading();
 						loop = false;
 					default:
 						System.out.println(gearError);
@@ -160,7 +158,7 @@ class Car {
 				
 					steeringWheel(userInputList.get(0));
 					transmission(Integer.parseInt(userInputList.get(1)));
-					gasPedal(Integer.parseInt(userInputList.get(2)));
+					gasPedal(Integer.parseInt(userInputList.get(2)), world);
 					
 				} else {
 				
@@ -174,6 +172,10 @@ class Car {
 				
 					transmission(Integer.parseInt(userInputList.get(1)));
 					
+				} else if (userInputList.get(0).equals("obstacle") == true && isInteger(userInputList.get(1),10)){
+				
+					//goToObstacle(Integer.parseInt(userInputList.get(1)));
+				
 				} else {
 				
 					System.out.println("failTwo: " + badCom);
@@ -188,7 +190,7 @@ class Car {
 					
 				} else if (isInteger(userInputList.get(0), 10) == true) {
 				
-					gasPedal(Integer.parseInt(userInputList.get(0)));
+					gasPedal(Integer.parseInt(userInputList.get(0)), world);
 					
 				} else if (userInputList.get(0).equals("help") == true) {
 				
@@ -256,117 +258,85 @@ class Car {
 	
 	}
 	
-	private void gasPedal(int distance, StringArray<Obstacle> obstacles, World world) {
+	private void gasPedal(int distance, World world) {
 	
-		int newCarX = carX;
-		int newCarY = carY;
-	
-		if (carDir.equals("north") == true) {
-		
-			if (carGear > 0) {
-				newCarY = carY - distance;
-			} else if (carGear < 0) {
-				newCarY = carY + distance;
-			}
-		
-		} else if (carDir.equals("south") == true) {
-		
-			if (carGear > 0) {
-				newCarY = carY + distance;
-			} else if (carGear <0) {
-				newCarY = carY - distance;
-			}
-		
-		} else if (carDir.equals("east") == true) {
-		
-			if (carGear > 0) {
-				newCarX = carX + distance;
-			} else if (carGear < 0) {
-				newCarX = carX - distance;
-			}
-		
-		} else if (carDir.equals("west") == true) {
-		
-			if (carGear > 0) {
-				newCarX = carX - distance;
-			} else if (carGear < 0) {
-				newCarX = carX + distance;
-			}
-		
-		}
+		switch (heading) {
+			case "north":
 			
-		int deltaY = newY - oldY;
-		int deltaX = newX - oldX;
-		int currentObstIndex = 0;
+				for (int i = 1; i <= distance; i++) {
 				
-		if (deltaX != 0) {
-		
-			for (int j = 0; j < obstacles.getSize(); j++) {
-				
-				if (Math.max(Math.max(oldX, newX), obstacles.get(j).getWBound()) <= Math.min(Math.min(oldX, newX), obstacles.get(j).getEBound())) {
-				
-					if (Math.max(oldY, obstacles.get(j).getNBound()) <= Math.min(oldY, obstacles.get(j).getSBound())) {
-					 
-						if (heading.equals("east")) {
+					if (world.getSpot(carY - 1, carX).isObstacle() == true) {
 					
-							newX = oldX + (newX - obstacles.get(j).getWBound());
-							blocked = true;
-							currentObstIndex = j;
+						blocked = true;
+						System.out.println("Found " + world.getSpot(carY - 1, carX).getObstacleName() + ". Path is blocked");
+						break;
 					
-						} else if (heading.equals("west")) {
+					} else {
 					
-							newX = oldX + (newX - obstacles.get(j).getEBound());
-							blocked = true;
-							currentObstIndex = j;
+					carY--;
 					
-						}
-						
 					}
-						
+				
 				}
 				
-			}
+			case "south":
+			
+				for (int i = 1; i <= distance; i++) {
 				
-		}
-				
-		if (deltaY != 0) {
-		
-			for (int j = 0; j < obstacles.getSize(); j++) {
-				
-				if (Math.max(Math.max(oldY, newY), obstacles.get(j).getNBound()) <= Math.min(Math.min(oldY, newY), obstacles.get(j).getSBound())) {
-				
-					if (Math.max(oldX, obstacles.get(j).getWBound()) <= Math.min(oldX, obstacles.get(j).getEBound())) {
-					 
-						if (heading.equals("south")) {
+					if (world.getSpot(carY + 1, carX).isObstacle() == true) {
 					
-							newY = oldY + (newY - obstacles.get(j).getNBound());
-							blocked = true;
-							currentObstIndex = j;
+						blocked = true;
+						System.out.println("Found " + world.getSpot(carY + 1, carX).getObstacleName() + ". Path is blocked");
+						break;
 					
-						} else if (heading.equals("north")) {
+					} else {
 					
-							newY = oldY + (newY - obstacles.get(j).getEBound());
-							blocked = true;
-							currentObstIndex = j;
+					carY++;
 					
-						}
-						
 					}
-						
+				
 				}
 				
-			}
+			case "east":
 				
+				
+				for (int i = 1; i <= distance; i++) {
+				
+					if (world.getSpot(carY, carX + 1).isObstacle() == true) {
+					
+						blocked = true;
+						System.out.println("Found " + world.getSpot(carY, carX + 1).getObstacleName() + ". Path is blocked");
+						break;
+					
+					} else {
+					
+					carX++;
+					
+					}
+				
+				}
+				
+			case "west": 
+				
+				for (int i = 1; i <= distance; i++) {
+				
+					if (world.getSpot(carY, carX - 1).isObstacle() == true) {
+					
+						blocked = true;
+						System.out.println("Found " + world.getSpot(carY, carX - 1).getObstacleName() + ". Path is blocked");
+						break;
+					
+					} else {
+					
+					carX--;
+					
+					}
+				
+				}
+				
+			default:
+				System.out.println(dirError);
 		}
-		
-		if (newCarX >= world.getSizeX() || newCarX <= 0) {
-		
-			
-		
-		}
-		
-		carX = newCarX;
-		carY = newCarY;
 	
 	}
 	
@@ -375,6 +345,7 @@ class Car {
 		System.out.println("Location: (" + carX + "," + carY + ")");
 		System.out.println("Facing: " + carDir);
 		System.out.println("Gear: " + carGear);
+		System.out.println("Blocked? " + blocked);
 	
 	}
 	
@@ -396,9 +367,21 @@ class World {
 	int sizeY 			= 100;
 	int obstacleCount 	= 5;
 	
+	Spot[][] grid;
+	
 	World() {
 	
+		grid = new Spot[sizeX-1][sizeY-1];
 		
+		for (int i = 1; i < sizeX; i++) {
+		
+			for (int j = 1; j < sizeY; j++) {
+			
+				grid[i-1][j-1] = new Spot(i,j);
+				
+			}
+			
+		}
 	
 	}
 	
@@ -420,6 +403,12 @@ class World {
 	
 	}
 	
+	public Spot getSpot(int x, int y) {
+	
+		return grid[x-1][y-1];
+	
+	}
+	
 	
 
 }
@@ -435,10 +424,13 @@ class Obstacle {
 	int eBound;
 	int nBound;
 	int sBound;
+	int index;
 	String name;
 	boolean found = false;
+	int foundX;
+	int foundY;
 	
-	Obstacle(String nameP, World world) {
+	Obstacle(int ind, World world) {
 	
 		Random random = new Random();
 		
@@ -460,29 +452,26 @@ class Obstacle {
 		int bufferX = (width - 1)/2;
 		int bufferY = (height - 1)/2;
 		
-		centroidX = random.nextInt(world.getSizeX() + 1 - bufferX);
-		centroidY = random.nextInt(world.getSizeY() + 1 - bufferX);
+		centroidX = random.nextInt(world.getSizeX() - bufferX);
+		centroidY = random.nextInt(world.getSizeY() - bufferX);
 		
-		name = "obstacle" + nameP;
+		name = "obstacle" + Integer.toString(ind);
 		
 		wBound = centroidX - bufferX;
 		eBound = centroidX + bufferX;
 		nBound = centroidY - bufferY;
 		sBound = centroidY + bufferY;
 		
-	
-	}
-	
-	Obstacle(int nBound, int sBound, int eBound, int wBound) {
-	
-		width = eBound - wBound;
-		height = sBound - nBound;
-	
-		centroidX = (width + 1)/2;
-		centroidY = (height + 1)/2;
+		for (int i = wBound; i <= eBound; i++) {
 		
-		name = world;
-		found = true;
+			for (int j = nBound; j <= sBound; j++) {
+		
+				world.getSpot(i,j).setObstacleName(name);
+				world.getSpot(i,j).setObstacleIndex(ind);
+			
+			}
+		
+		}	
 	
 	}
 	
@@ -546,9 +535,59 @@ class Obstacle {
 	
 	}
 	
-	public int getUBound() {
+	public int getSBound() {
 	
-		return uBound;
+		return sBound;
+	
+	}
+
+}
+
+class Spot {
+
+	boolean obst;
+	String obstName;
+	int obstIndex;
+	int xAddress;
+	int yAddress;
+
+	Spot (int x, int y) {
+	
+		obst = false;
+		obstName = "";
+		obstIndex = 0;
+		xAddress = x;
+		yAddress = y;
+	
+	}
+	
+	public boolean isObstacle() {
+	
+		return obst;
+	
+	}
+	
+	public int getObstacleIndex() {
+	
+		return obstIndex;
+	
+	}
+	
+	public String getObstacleName() {
+	
+		return obstName;
+	
+	}
+	
+	public void setObstacleIndex(int index) {
+	
+		obstIndex = index;
+	
+	}
+	
+	public void setObstacleName(String name) {
+	
+		obstName = name;
 	
 	}
 
