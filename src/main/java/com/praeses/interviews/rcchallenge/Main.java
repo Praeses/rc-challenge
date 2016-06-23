@@ -76,7 +76,6 @@ class Car {
    		
    			List<String> userInputList = Arrays.asList(userInput.split("\\s*,\\s*"));		
 			arrayLength = userInputList.size();
-			System.out.println("ArrayList size: " + arrayLength);
 		
 			if (arrayLength == 2 && isInteger(userInputList.get(0),10) && isInteger(userInputList.get(1),10)) {
 		
@@ -166,13 +165,7 @@ class Car {
 			} while (loop == true);
 			
 			List<String> userInputList = Arrays.asList(userInput.split("\\s*,\\s*"));		
-			arrayLength = userInputList.size();
-			System.out.println("ArrayList size: " + arrayLength);
-		
-			for (int i = 0; i < arrayLength; i++) {
-				System.out.println("ArrayList index of " + i + " is: " + ":" + userInputList.get(i) + ":");
-			}
-		
+			arrayLength = userInputList.size();		
 		
 			if (arrayLength == 3) {				
 				
@@ -184,7 +177,7 @@ class Car {
 					
 				} else {
 				
-					System.out.println("failThree: " + badCom);
+					System.out.println(badCom);
 				
 				}
 				
@@ -200,7 +193,7 @@ class Car {
 				
 				} else {
 				
-					System.out.println("failTwo: " + badCom);
+					System.out.println(badCom);
 				
 				}
 				
@@ -228,13 +221,13 @@ class Car {
 			
 				} else {
 				
-					System.out.println("failOne: " + badCom);
+					System.out.println(badCom);
 				
 				}
 				
 			} else {
 			
-				System.out.println("fail: " + badCom);
+				System.out.println(badCom);
 			
 			}
 			
@@ -285,8 +278,6 @@ class Car {
 		switch (heading) {
 			case "north":
 			
-				System.out.println("made it into the north case");
-			
 				for (int i = 1; i <= distance; i++) {
 				
 					if (world.getSpot(carY - 1, carX).isObstacle() == true) {
@@ -305,8 +296,6 @@ class Car {
 				break;
 				
 			case "south":
-			
-				System.out.println("made it into the south case");
 			
 				for (int i = 1; i <= distance; i++) {
 				
@@ -327,8 +316,6 @@ class Car {
 				
 			case "east":
 				
-				System.out.println("made it into the east case");
-				
 				for (int i = 1; i <= distance; i++) {
 				
 					if (world.getSpot(carY, carX + 1).isObstacle() == true) {
@@ -346,9 +333,7 @@ class Car {
 				}
 				break;
 				
-			case "west": 
-			
-				System.out.println("made it into the west case");
+			case "west":
 				
 				for (int i = 1; i <= distance; i++) {
 				
@@ -369,7 +354,7 @@ class Car {
 				
 			default:
 			
-				System.out.println("failed to go");
+				System.out.println(dirError);
 		}
 	
 	}
@@ -379,7 +364,6 @@ class Car {
 		System.out.println("Location: (" + carX + "," + carY + ")");
 		System.out.println("Facing: " + carDir);
 		System.out.println("Gear: " + carGear);
-		System.out.println("Blocked? " + blocked);
 	
 	}
 	
