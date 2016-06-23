@@ -18,9 +18,9 @@ public class Main {
 		
 		}
 		
-		Car rcCar = new Car();
+		Car rcCar = new Car(world, obstacles);
 		
-    	}
+    }
 }
 
 class Car {
@@ -40,10 +40,10 @@ class Car {
 	String badCom 			= "Unrecognized Command. Type 'help' for guidance.";
 	static Scanner scInput;
 
-	Car() {
+	Car(World world, ArrayList<Obstacle> obstacles) {
 		
 		ignition();
-		driverSeat();
+		driverSeat(world, obstacles);
 		
 	}
 	
@@ -112,7 +112,7 @@ class Car {
 
 	}
 	
-	private void driverSeat() {
+	private void driverSeat(World world, ArrayList<Obstacle> obstacles) {
 	
 		boolean loop = true;
 		boolean loopB = true;	
@@ -139,12 +139,6 @@ class Car {
 			List<String> userInputList = Arrays.asList(userInput.split("\\s*,\\s*"));		
 			arrayLength = userInputList.size();
 			System.out.println("ArrayList size: " + arrayLength);
-			
-			if (arrayLength < 2) {
-			
-				
-			
-			}
 		
 			for (int i = 0; i < arrayLength; i++) {
 				System.out.println("ArrayList index of " + i + " is: " + ":" + userInputList.get(i) + ":");
@@ -229,7 +223,7 @@ class Car {
 	
 	}
 	
-	private void gasPedal(int distance) {
+	private void gasPedal(int distance, StringArray<Obstacle> obstacles, World world) {
 	
 		int newCarX = carX;
 		int newCarY = carY;
@@ -267,9 +261,40 @@ class Car {
 			}
 		
 		}
+			
+		int deltaY = newY - oldY;
+		int deltaX = newX - oldX;
+				
+		if (deltaX != 0) {
+				
+			if (max(max(oldX, newX), obstacles.getWBound()) <= min(min(oldX, newX), obstacles.getEBound())) {
+			
+			}
+				
+		}
+				
+		if (deltaY != 0) {
+				
+			for (int i = 1; i <= abs(detlaY); i++) {
+					
+				for (int j = 0; j < obstacles.getSize; j++) {
+					
+					
+					
+				}
+					
+			}
+				
+		}
 		
 		carX = newCarX;
 		carY = newCarY;
+	
+	}
+	
+	private void driverAssist(int oldX, int oldY, int newX, int newY) {
+	
+		
 	
 	}
 	
@@ -334,6 +359,10 @@ class Obstacle {
 	int centroidY;
 	int width;
 	int height;
+	int wBound;
+	int eBound;
+	int nBound;
+	int sBound;
 	String name;
 	boolean found = false;
 	
@@ -363,6 +392,12 @@ class Obstacle {
 		centroidY = random.nextInt(world.getSizeY() + 1 - bufferX);
 		
 		name = "obstacle" + nameP;
+		
+		wBound = centroidX - bufferX;
+		eBound = centroidX + bufferX;
+		nBound = centroidY - bufferY;
+		sBound = centroidY + bufferY;
+		
 	
 	}
 	
@@ -405,6 +440,30 @@ class Obstacle {
 	public void setFound() {
 	
 		found = true;
+	
+	}
+	
+	public int getWBound() {
+	
+		return wBound;
+	
+	}
+	
+	public int getEBound() {
+	
+		return eBound;
+	
+	}
+	
+	public int getNBound() {
+	
+		return nBound;
+	
+	}
+	
+	public int getUBound() {
+	
+		return uBound;
 	
 	}
 
