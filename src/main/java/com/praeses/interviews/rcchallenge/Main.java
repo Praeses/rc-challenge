@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.lang.System.*;
 import java.lang.Integer;
+import java.lang.Math;
 
 public class Main {
 
@@ -12,6 +13,12 @@ public class Main {
 		World world = new World();
 		
 		ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
+		
+		//obstacles.add(new Obstacle(-1, world.getSizeY(), 0, -1));
+		//obstacles.add(new Obstacle(-1, 0, world.getSizeX(), -1));
+		//obstacles.add(new Obstacle(-1, world.getSizeY(), world.getSizeX() + 1, world.getSizeX()));
+		//obstacles.add(new Obstacle(world.getSizeY(), world.getSizeY() + 1, world.getSizeX(), -1));
+		
 		for (int i = 0; i < world.getObstacleCount(); i++) {
 		
 			obstacles.add(new Obstacle(Integer.toString(i), world));
@@ -29,6 +36,8 @@ class Car {
 	public int carY 		= 0;
 	public String carDir 	= "north";
 	int carGear 			= 1;
+	public String heading	= "north";
+	public boolean blocked	= "false";
 	int[] gearBox			= {-1,1};
 	String startXString		= "Please input the starting X Coordinate:";
 	String startYString 	= "Please input the starting Y Coordinate:";
@@ -214,12 +223,36 @@ class Car {
 	private void steeringWheel(String dir) {
 	
 		carDir = dir;
+		setHeading();
 	
 	}
 	
 	private void transmission(int shifter) {
 	
 		carGear = shifter;
+		setHeading();
+	
+	}
+	
+	private void setHeading() {
+	
+		if ((carDir.equals("north") && carGear == 1) || (carDir.equals("south") && carGear == -1)) {
+		
+			heading = "north";
+		
+		} else if ((carDir.equals("north") && carGear == -1) || (carDir.equals("south") && carGear == 1)) {
+		
+			heading = "south";
+		
+		} else if ((carDir.equals("east") && carGear == 1) || (carDir.equals("west") && carGear == -1)) {
+		
+			heading = "east";
+		
+		} else if ((carDir.equals("east") && carGear == -1) || (carDir.equals("west") && carGear == 1)) {
+		
+			heading = "west";
+		
+		}
 	
 	}
 	
@@ -264,37 +297,76 @@ class Car {
 			
 		int deltaY = newY - oldY;
 		int deltaX = newX - oldX;
+		int currentObstIndex = 0;
 				
 		if (deltaX != 0) {
+		
+			for (int j = 0; j < obstacles.getSize(); j++) {
 				
-			if (max(max(oldX, newX), obstacles.getWBound()) <= min(min(oldX, newX), obstacles.getEBound())) {
-			
+				if (Math.max(Math.max(oldX, newX), obstacles.get(j).getWBound()) <= Math.min(Math.min(oldX, newX), obstacles.get(j).getEBound())) {
+				
+					if (Math.max(oldY, obstacles.get(j).getNBound()) <= Math.min(oldY, obstacles.get(j).getSBound())) {
+					 
+						if (heading.equals("east")) {
+					
+							newX = oldX + (newX - obstacles.get(j).getWBound());
+							blocked = true;
+							currentObstIndex = j;
+					
+						} else if (heading.equals("west")) {
+					
+							newX = oldX + (newX - obstacles.get(j).getEBound());
+							blocked = true;
+							currentObstIndex = j;
+					
+						}
+						
+					}
+						
+				}
+				
 			}
 				
 		}
 				
 		if (deltaY != 0) {
+		
+			for (int j = 0; j < obstacles.getSize(); j++) {
 				
-			for (int i = 1; i <= abs(detlaY); i++) {
+				if (Math.max(Math.max(oldY, newY), obstacles.get(j).getNBound()) <= Math.min(Math.min(oldY, newY), obstacles.get(j).getSBound())) {
+				
+					if (Math.max(oldX, obstacles.get(j).getWBound()) <= Math.min(oldX, obstacles.get(j).getEBound())) {
+					 
+						if (heading.equals("south")) {
 					
-				for (int j = 0; j < obstacles.getSize; j++) {
+							newY = oldY + (newY - obstacles.get(j).getNBound());
+							blocked = true;
+							currentObstIndex = j;
 					
+						} else if (heading.equals("north")) {
 					
+							newY = oldY + (newY - obstacles.get(j).getEBound());
+							blocked = true;
+							currentObstIndex = j;
 					
+						}
+						
+					}
+						
 				}
-					
+				
 			}
 				
 		}
 		
+		if (newCarX >= world.getSizeX() || newCarX <= 0) {
+		
+			
+		
+		}
+		
 		carX = newCarX;
 		carY = newCarY;
-	
-	}
-	
-	private void driverAssist(int oldX, int oldY, int newX, int newY) {
-	
-		
 	
 	}
 	
@@ -398,6 +470,19 @@ class Obstacle {
 		nBound = centroidY - bufferY;
 		sBound = centroidY + bufferY;
 		
+	
+	}
+	
+	Obstacle(int nBound, int sBound, int eBound, int wBound) {
+	
+		width = eBound - wBound;
+		height = sBound - nBound;
+	
+		centroidX = (width + 1)/2;
+		centroidY = (height + 1)/2;
+		
+		name = world;
+		found = true;
 	
 	}
 	
