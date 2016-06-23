@@ -110,6 +110,7 @@ class Car {
 					case "north": case "south": case "east": case "west":
 						setHeading();
 						loop = false;
+						break;
 					default:
 						System.out.println(dirError);
 				}
@@ -128,6 +129,7 @@ class Car {
 					case -1: case 1: 
 						setHeading();
 						loop = false;
+						break;
 					default:
 						System.out.println(gearError);
 				}
@@ -283,6 +285,8 @@ class Car {
 		switch (heading) {
 			case "north":
 			
+				System.out.println("made it into the north case");
+			
 				for (int i = 1; i <= distance; i++) {
 				
 					if (world.getSpot(carY - 1, carX).isObstacle() == true) {
@@ -293,13 +297,16 @@ class Car {
 					
 					} else {
 					
-					carY--;
+						carY--;
 					
 					}
 				
 				}
+				break;
 				
 			case "south":
+			
+				System.out.println("made it into the south case");
 			
 				for (int i = 1; i <= distance; i++) {
 				
@@ -311,14 +318,16 @@ class Car {
 					
 					} else {
 					
-					carY++;
+						carY++;
 					
 					}
 				
 				}
+				break;
 				
 			case "east":
 				
+				System.out.println("made it into the east case");
 				
 				for (int i = 1; i <= distance; i++) {
 				
@@ -330,13 +339,16 @@ class Car {
 					
 					} else {
 					
-					carX++;
+						carX++;
 					
 					}
 				
 				}
+				break;
 				
 			case "west": 
+			
+				System.out.println("made it into the west case");
 				
 				for (int i = 1; i <= distance; i++) {
 				
@@ -348,14 +360,16 @@ class Car {
 					
 					} else {
 					
-					carX--;
+						carX--;
 					
 					}
 				
 				}
+				break;
 				
 			default:
-				System.out.println(dirError);
+			
+				System.out.println("failed to go");
 		}
 	
 	}
