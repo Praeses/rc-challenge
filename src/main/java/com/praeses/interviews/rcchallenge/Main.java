@@ -47,8 +47,8 @@ class Car {
 	public boolean blocked	= false;
 	String startXYString		= "Please enter the starting coordinate 'x,y':";
 	String startXYError 	= "Must be integers and formatted 'x,y'!";
-	String startDirString 	= "Please input the starting direction:";
-	String startGearString 	= "Please input the starting gear:";
+	String startDirString 	= "Please input the starting direction example-'west':";
+	String startGearString 	= "Please input the starting gear (-1 or 1):";
 	String intError 		= "Please enter an integer!";
 	String dirError 		= "Must be north, south, east, or west!";
 	String gearError 		= "Must be -1 or 1";
@@ -162,7 +162,7 @@ user inputs read here are passed to the neccessary methods to be acted on.
 	
 		boolean loop = true;
 		boolean loopB = true;	
-		String drivingGuide = "TBD";
+		String drivingGuide = "Example commands: 'west,-1,1', '50', 'gear,1', 'exit', 'help' ";
 		String delimit = ",";
 		String userInput = "init";	
 		int arrayLength;
@@ -172,6 +172,7 @@ user inputs read here are passed to the neccessary methods to be acted on.
 			do {
 				try {
 					System.out.println("Drive!");
+					System.out.println(drivingGuide);
 					userInput = scInput.next();
 					scInput.nextLine();
 					loop = false;
