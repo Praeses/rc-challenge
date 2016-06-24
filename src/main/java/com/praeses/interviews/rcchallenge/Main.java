@@ -534,8 +534,20 @@ class Obstacle {
 		int bufferX = (width - 1)/2;//buffer is radius minus the centroid.
 		int bufferY = (height - 1)/2;
 		
-		centroidX = random.nextInt(world.getSizeX() - bufferX);
-		centroidY = random.nextInt(world.getSizeY() - bufferX);
+		centroidX = random.nextInt(world.getSizeX() - bufferX - 1);
+		centroidY = random.nextInt(world.getSizeY() - bufferX - 1);
+		
+		if (centroidX < 4) {
+		
+			centroidX = 4;
+		
+		}
+		
+		if (centroidY < 4) {
+		
+			centroidY = 4;
+		
+		}
 		
 		name = "obstacle" + Integer.toString(ind);
 		
