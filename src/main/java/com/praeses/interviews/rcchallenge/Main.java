@@ -153,9 +153,9 @@ class Car {
 		do {
 			do {
 				try {
-					scInput.nextLine();
 					System.out.println("Drive!");
 					userInput = scInput.next();
+					scInput.nextLine();
 					loop = false;
 				} catch (Exception e) {
 					System.out.println("error");
@@ -275,20 +275,30 @@ class Car {
 	
 	private void gasPedal(int distance, World world) {
 	
+		int nextSpot = 0;
+	
 		switch (heading) {
 			case "north":
 			
 				for (int i = 1; i <= distance; i++) {
 				
-					if (world.getSpot(carY - 1, carX).isObstacle() == true) {
+					nextSpot = carY - 1;
+			
+					if (nextSpot < 1) {
+						
+					nextSpot = world.getSizeY();
+						
+					}
+				
+					if (world.getSpot(carX, nextSpot).isObstacle() == true) {
 					
 						blocked = true;
-						System.out.println("Found " + world.getSpot(carY - 1, carX).getObstacleName() + ". Path is blocked");
+						System.out.println("Found " + world.getSpot(carX, nextSpot).getObstacleName() + ". Path is blocked");
 						break;
 					
 					} else {
-					
-						carY--;
+						
+						carY = nextSpot;
 					
 					}
 				
@@ -299,15 +309,23 @@ class Car {
 			
 				for (int i = 1; i <= distance; i++) {
 				
-					if (world.getSpot(carY + 1, carX).isObstacle() == true) {
+					nextSpot = carY + 1;
+			
+					if (nextSpot > world.getSizeY()) {
+						
+						nextSpot = 1;
+						
+					}
+				
+					if (world.getSpot(carX, nextSpot).isObstacle() == true) {
 					
 						blocked = true;
-						System.out.println("Found " + world.getSpot(carY + 1, carX).getObstacleName() + ". Path is blocked");
+						System.out.println("Found " + world.getSpot(carX, nextSpot).getObstacleName() + ". Path is blocked");
 						break;
 					
 					} else {
-					
-						carY++;
+						
+							carY = nextSpot;
 					
 					}
 				
@@ -318,15 +336,23 @@ class Car {
 				
 				for (int i = 1; i <= distance; i++) {
 				
-					if (world.getSpot(carY, carX + 1).isObstacle() == true) {
+					nextSpot = carX + 1;
+			
+					if (nextSpot > world.getSizeX()) {
+						
+						nextSpot = 1;
+						
+					}
+				
+					if (world.getSpot(nextSpot, carY).isObstacle() == true) {
 					
 						blocked = true;
-						System.out.println("Found " + world.getSpot(carY, carX + 1).getObstacleName() + ". Path is blocked");
+						System.out.println("Found " + world.getSpot(nextSpot, carY).getObstacleName() + ". Path is blocked");
 						break;
 					
 					} else {
-					
-						carX++;
+						
+							carX = nextSpot;
 					
 					}
 				
@@ -337,15 +363,23 @@ class Car {
 				
 				for (int i = 1; i <= distance; i++) {
 				
-					if (world.getSpot(carY, carX - 1).isObstacle() == true) {
+					nextSpot = carX - 1;
+			
+					if (nextSpot < 1) {
+						
+						nextSpot = world.getSizeX();
+						
+					}
+				
+					if (world.getSpot(nextSpot, carY).isObstacle() == true) {
 					
 						blocked = true;
-						System.out.println("Found " + world.getSpot(carY, carX - 1).getObstacleName() + ". Path is blocked");
+						System.out.println("Found " + world.getSpot(nextSpot, carY).getObstacleName() + ". Path is blocked");
 						break;
 					
 					} else {
-					
-						carX--;
+						
+							carX = nextSpot;
 					
 					}
 				
@@ -389,11 +423,11 @@ class World {
 	
 	World() {
 	
-		grid = new Spot[sizeX][sizeY];
+		grid = new Spot[sizeX+1][sizeY+1];
 		
-		for (int i = 1; i < sizeX; i++) {
+		for (int i = 1; i <= sizeX; i++) {
 		
-			for (int j = 1; j < sizeY; j++) {
+			for (int j = 1; j <= sizeY; j++) {
 			
 				grid[i][j] = new Spot(i,j);
 				
