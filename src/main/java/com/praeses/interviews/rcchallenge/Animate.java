@@ -14,12 +14,19 @@ public class Animate {
 	private static void createWindow() {
 	
 		JFrame frame = new JFrame("RC Challenge");
+		frame.setBounds(0,0,1000,1000);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		JLabel textLabel = new JLabel("I'm a label in the window",SwingConstants.CENTER);
-		textLabel.setPreferredSize(new Dimension(300, 100));
-		frame.getContentPane().add(textLabel, BorderLayout.CENTER);
+		JPanel panel = new JPanel();
+		panel.setLayout(new FlowLayout());
 		
+		JLabel label = new JLabel("I'm a label in the window",SwingConstants.CENTER);
+		label.setPreferredSize(new Dimension(300, 100));
+		
+		panel.add(label);
+		
+		frame.add(panel);
+		frame.setSize(300,300);		
 		frame.setLocationRelativeTo(null);
 		frame.pack();
 		frame.setVisible(true);
