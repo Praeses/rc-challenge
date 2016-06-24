@@ -6,6 +6,15 @@ import java.lang.System.*;
 import java.lang.Integer;
 import java.lang.Math;
 
+
+/**rc-challenge is a game like program that simulates an "rc car". The listeners
+should handle most incorrect user inputs. However, they are picky and require
+exact formatting. The program is written with a future jFrame animation of the
+car, world, and obstacles in mind.
+*/
+
+
+//Main class is just a convenient place for the main method.
 public class Main {
 
     public static void main(String[] args) {
@@ -25,6 +34,9 @@ public class Main {
     }
 }
 
+/**Car class uses many directly access/edited public variables. Also, this is
+where the input listeners live (ignition() and driverSeat() methods)
+*/
 class Car {
 
 	public int carX 		= 0;
@@ -33,7 +45,6 @@ class Car {
 	int carGear 			= 1;
 	public String heading	= "north";
 	public boolean blocked	= false;
-	int[] gearBox			= {-1,1};
 	String startXYString		= "Please enter the starting coordinate 'x,y':";
 	String startXYError 	= "Must be integers and formatted 'x,y'!";
 	String startDirString 	= "Please input the starting direction:";
@@ -51,6 +62,8 @@ class Car {
 		
 	}
 	
+/**ignition() is where the initial values (x and y coordinates, direction, and
+gear) for the car instance are read from the user.*/
 	private void ignition(World world) {
 		
 		boolean loop = true;
@@ -139,7 +152,11 @@ class Car {
    		} while (loop == true);
 
 	}
-	
+
+/**driverSeat() is where the bulk of user interaction occurs. After the
+initial values are read in ignition(), all other user inputs occur here. All the
+user inputs read here are passed to the neccessary methods to be acted on.
+*/
 	private void driverSeat(World world, ArrayList<Obstacle> obstacles) {
 	
 		boolean loop = true;
@@ -236,7 +253,10 @@ class Car {
 		} while (loopB == true);
 		
 	}
-	
+
+//All methods were named to match their function relative to actual car parts.
+//Obviously, steeringWheel() changes where the car is facing. Most all the names
+//should be obvious.
 	private void steeringWheel(String dir) {
 	
 		carDir = dir;
@@ -251,6 +271,7 @@ class Car {
 	
 	}
 	
+//heading is the combination of direction and gear (-1,1 aka reverse,forward).
 	private void setHeading() {
 	
 		if ((carDir.equals("north") && carGear == 1) || (carDir.equals("south") && carGear == -1)) {
@@ -273,6 +294,9 @@ class Car {
 	
 	}
 	
+/**gasPedal() also contains object detection and edge wrapping since these
+functions are so closely tied to the iterative movement of the car.
+*/
 	private void gasPedal(int distance, World world) {
 	
 		int nextSpot = 0;
@@ -423,7 +447,9 @@ class World {
 	
 	World() {
 	
-		grid = new Spot[sizeX+1][sizeY+1];
+		//the 0 indeces of grid are empty. This is so that the actual grid
+		//location matches the array location.
+		grid = new Spot[sizeX+1][sizeY+1]; 
 		
 		for (int i = 1; i <= sizeX; i++) {
 		
@@ -465,7 +491,11 @@ class World {
 
 }
 
-
+/**Obstacles must have odd dimensions. That is so they have an integer centroid.
+This enables future functionality for the car to "go to" an obstacle and be
+able to drive towards the centroid. Also, this allows a simple way to designate
+the location of an obstacle. Instead of relying on occupied space alone.
+*/
 class Obstacle {
 
 	int centroidX;
@@ -501,7 +531,7 @@ class Obstacle {
 			
 		}
 		
-		int bufferX = (width - 1)/2;
+		int bufferX = (width - 1)/2;//buffer is radius minus the centroid.
 		int bufferY = (height - 1)/2;
 		
 		centroidX = random.nextInt(world.getSizeX() - bufferX);
@@ -596,6 +626,9 @@ class Obstacle {
 
 }
 
+/**Spot class allows very easy obstacle detection. That is the primary reason
+that the grid is made up of an object instead of just tracking with integers.
+*/
 class Spot {
 
 	boolean obst;
