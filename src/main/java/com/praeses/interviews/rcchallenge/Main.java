@@ -58,6 +58,7 @@ class Car {
 	Car(World world, ArrayList<Obstacle> obstacles) {
 		
 		ignition(world);
+		Animate draw = new Animate();
 		driverSeat(world, obstacles);
 		
 	}
