@@ -100,6 +100,10 @@ gear) for the car instance are read from the user.*/
 				
 					System.out.println("Obstacle! Try a different spot!");
 				
+				} else if (carX > world.getSizeX() || carY >world.getSizeY()) {
+				
+					System.out.println("Out of bounds! The world is " + world.getSizeX() + "x" + world.getSizeY() + ".");
+				
 				} else {
 				
 					loopB = false;
