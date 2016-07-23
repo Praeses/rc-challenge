@@ -96,13 +96,13 @@ gear) for the car instance are read from the user.*/
 				carX = Integer.parseInt(userInputList.get(0));
 				carY = Integer.parseInt(userInputList.get(1));
 				
-				if (world.getSpot(carX, carY).isObstacle() == true) {
-				
-					System.out.println("Obstacle! Try a different spot!");
-				
-				} else if (carX > world.getSizeX() || carY >world.getSizeY()) {
+				if (carX > world.getSizeX() || carY > world.getSizeY()) {
 				
 					System.out.println("Out of bounds! The world is " + world.getSizeX() + "x" + world.getSizeY() + ".");
+				
+				} else if (world.getSpot(carX, carY).isObstacle() == true) {
+				
+					System.out.println("Obstacle! Try a different spot!");
 				
 				} else {
 				
