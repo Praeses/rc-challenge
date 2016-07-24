@@ -67,26 +67,26 @@ class Car {
 gear) for the car instance are read from the user.*/
 	private void ignition(World world) {
 		
-		boolean loop = true;
-		boolean loopB = true;
+		boolean gettingUserInput = true;
+		boolean checkingInput = true;
 		int arrayLength = 0;
 		String userInput = "init";
 		setHeading();
 		
 		scInput = new Scanner(System.in);
 		
-		while (loopB == true) {
-			while (loop == true) {
+		while (checkingInput == true) {
+			while (gettingUserInput == true) {
 				try {
 					System.out.println(startXYString);
 					userInput = scInput.next();
-					loop = false;
+					gettingUserInput = false;
    				} catch (Exception e) {
    						System.out.println(startXYError);
    						scInput.nextLine();
    				}
    			}
-   			loop = true;
+   			gettingUserInput = true;
    		
    			List<String> userInputList = Arrays.asList(userInput.split("\\s*,\\s*"));		
 			arrayLength = userInputList.size();
@@ -106,7 +106,7 @@ gear) for the car instance are read from the user.*/
 				
 				} else {
 				
-					loopB = false;
+					checkingInput = false;
 				
 				}
 		
@@ -117,16 +117,16 @@ gear) for the car instance are read from the user.*/
 			}
 		
 		}
-		loopB = true;
+		checkingInput = true;
    		
-   		while (loop == true) {
+   		while (gettingUserInput == true) {
    			try {
 				System.out.println(startDirString);
 				carDir = scInput.next();
 				switch (carDir) {
 					case "north": case "south": case "east": case "west":
 						setHeading();
-						loop = false;
+						gettingUserInput = false;
 						break;
 					default:
 						System.out.println(dirError);
@@ -136,16 +136,16 @@ gear) for the car instance are read from the user.*/
    				scInput.nextLine();
    			}
    		};
-   		loop = true;
+   		gettingUserInput = true;
    		
-   		while (loop == true) {
+   		while (gettingUserInput == true) {
    			try {
 				System.out.println(startGearString);
 				carGear = scInput.nextInt();
 				switch (carGear) {
 					case -1: case 1: 
 						setHeading();
-						loop = false;
+						gettingUserInput = false;
 						break;
 					default:
 						System.out.println(gearError);
@@ -164,29 +164,29 @@ user inputs read here are passed to the neccessary methods to be acted on.
 */
 	private void driverSeat(World world, ArrayList<Obstacle> obstacles) {
 	
-		boolean loop = true;
-		boolean loopB = true;	
+		boolean gettingUserInput = true;
+		boolean checkingInput = true;	
 		String drivingGuide = "Example commands: 'west,-1,1', '50', 'gear,1', 'exit', 'help' ";
 		String delimit = ",";
 		String userInput = "init";	
 		int arrayLength;
 		int temp;
 		
-		while (loopB == true) {
-			while (loop == true) {
+		while (checkingInput == true) {
+			while (gettingUserInput == true) {
 				try {
 					System.out.println("Drive!");
 					System.out.println(drivingGuide);
 					userInput = scInput.next();
 					scInput.nextLine();
-					loop = false;
+					gettingUserInput = false;
 				} catch (Exception e) {
 					System.out.println("error");
 					scInput.nextLine();
 				}
 				
 			}
-			loop = true;
+			gettingUserInput = true;
 			
 			List<String> userInputList = Arrays.asList(userInput.split("\\s*,\\s*"));		
 			arrayLength = userInputList.size();		
@@ -237,7 +237,7 @@ user inputs read here are passed to the neccessary methods to be acted on.
 					
 				} else if (userInputList.get(0).equals("exit") == true) {
 				
-					loopB = false;
+					checkingInput = false;
 					
 				} else if (userInputList.get(0).equals("around the block") == true) {
 				
