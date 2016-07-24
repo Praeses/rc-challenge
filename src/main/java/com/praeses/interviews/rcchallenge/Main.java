@@ -91,7 +91,7 @@ gear) for the car instance are read from the user.*/
    			List<String> userInputList = Arrays.asList(userInput.split("\\s*,\\s*"));		
 			arrayLength = userInputList.size();
 		
-			if (arrayLength == 2 && isInteger(userInputList.get(0),10) && isInteger(userInputList.get(1),10)) {
+			if (arrayLength == 2 && isInteger(userInputList.get(0)) && isInteger(userInputList.get(1))) {
 		
 				carX = Integer.parseInt(userInputList.get(0));
 				carY = Integer.parseInt(userInputList.get(1));
@@ -193,7 +193,7 @@ user inputs read here are passed to the neccessary methods to be acted on.
 		
 			if (arrayLength == 3) {				
 				
-				if (isInteger(userInputList.get(1), 10) == true && isInteger(userInputList.get(2), 10) == true) {
+				if (isInteger(userInputList.get(1)) == true && isInteger(userInputList.get(2)) == true) {
 				
 					steeringWheel(userInputList.get(0));
 					transmission(Integer.parseInt(userInputList.get(1)));
@@ -207,11 +207,11 @@ user inputs read here are passed to the neccessary methods to be acted on.
 				
 			} else if (arrayLength == 2) {
 			
-				if (userInputList.get(0).equals("gear") == true && isInteger(userInputList.get(1),10)) {
+				if (userInputList.get(0).equals("gear") == true && isInteger(userInputList.get(1))) {
 				
 					transmission(Integer.parseInt(userInputList.get(1)));
 					
-				} else if (userInputList.get(0).equals("obstacle") == true && isInteger(userInputList.get(1),10)){
+				} else if (userInputList.get(0).equals("obstacle") == true && isInteger(userInputList.get(1))){
 				
 					//goToObstacle(Integer.parseInt(userInputList.get(1)));
 				
@@ -227,7 +227,7 @@ user inputs read here are passed to the neccessary methods to be acted on.
 				
 					steeringWheel(userInputList.get(0));
 					
-				} else if (isInteger(userInputList.get(0), 10) == true) {
+				} else if (isInteger(userInputList.get(0)) == true) {
 				
 					gasPedal(Integer.parseInt(userInputList.get(0)), world);
 					
@@ -432,11 +432,11 @@ functions are so closely tied to the iterative movement of the car.
 	
 	}
 	
-	static boolean isInteger(String str, int baseTen) {
+	static boolean isInteger(String str) {
 	
 		Scanner input = new Scanner(str.trim());
-		if(!input.hasNextInt(baseTen)) return false;
-		input.nextInt(baseTen);
+		if(!input.hasNextInt(10)) return false;
+		input.nextInt(10);
 		return !input.hasNext();
 	
 	}
