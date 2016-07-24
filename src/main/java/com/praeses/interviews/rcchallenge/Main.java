@@ -75,8 +75,8 @@ gear) for the car instance are read from the user.*/
 		
 		scInput = new Scanner(System.in);
 		
-		do {
-			do {
+		while (loopB == true) {
+			while (loop == true) {
 				try {
 					System.out.println(startXYString);
 					userInput = scInput.next();
@@ -85,7 +85,7 @@ gear) for the car instance are read from the user.*/
    						System.out.println(startXYError);
    						scInput.nextLine();
    				}
-   			} while (loop == true);
+   			}
    			loop = true;
    		
    			List<String> userInputList = Arrays.asList(userInput.split("\\s*,\\s*"));		
@@ -116,10 +116,10 @@ gear) for the car instance are read from the user.*/
 			
 			}
 		
-		} while (loopB == true);
+		}
 		loopB = true;
    		
-   		do {
+   		while (loop == true) {
    			try {
 				System.out.println(startDirString);
 				carDir = scInput.next();
@@ -135,10 +135,10 @@ gear) for the car instance are read from the user.*/
    				System.out.println(dirError);
    				scInput.nextLine();
    			}
-   		} while (loop == true);
+   		};
    		loop = true;
    		
-   		do {
+   		while (loop == true) {
    			try {
 				System.out.println(startGearString);
 				carGear = scInput.nextInt();
@@ -154,7 +154,7 @@ gear) for the car instance are read from the user.*/
    				System.out.println(gearError);
    				scInput.nextLine();
    			}
-   		} while (loop == true);
+   		}
 
 	}
 
@@ -172,8 +172,8 @@ user inputs read here are passed to the neccessary methods to be acted on.
 		int arrayLength;
 		int temp;
 		
-		do {
-			do {
+		while (loopB == true) {
+			while (loop == true) {
 				try {
 					System.out.println("Drive!");
 					System.out.println(drivingGuide);
@@ -185,7 +185,8 @@ user inputs read here are passed to the neccessary methods to be acted on.
 					scInput.nextLine();
 				}
 				
-			} while (loop == true);
+			}
+			loop = true;
 			
 			List<String> userInputList = Arrays.asList(userInput.split("\\s*,\\s*"));		
 			arrayLength = userInputList.size();		
@@ -256,7 +257,7 @@ user inputs read here are passed to the neccessary methods to be acted on.
 			
 			dashboard();
 			
-		} while (loopB == true);
+		}
 		
 	}
 
