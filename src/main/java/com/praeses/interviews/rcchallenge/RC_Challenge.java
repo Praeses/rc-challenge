@@ -20,265 +20,291 @@ public class RC_Challenge {
 
     }
 
-    class Car {
+    class World {
+
+        class Car {
 
 
 
-    }
+        }
 
-    class Obstacle {
+        class Obstacle {
 
-        private int centroidX;
-    	private int centroidY;
-    	private int width;
-    	private int height;
-    	private int wBound;
-    	private int eBound;
-    	private int nBound;
-    	private int sBound;
-    	private int index;
-    	private String name;
-    	private boolean found = false;
-    	private int foundX;
-    	private int foundY;
+            private int centroidX;
+    	    private int centroidY;
+    	    private int width;
+    	    private int height;
+    	    private int wBound;
+    	    private int eBound;
+    	    private int nBound;
+    	    private int sBound;
+    	    private int index;
+    	    private String name;
+    	    private boolean found = false;
+    	    private int foundX;
+    	    private int foundY;
 
-    	Obstacle(int ind, World world) {
+    	    Obstacle(int index) {
 
-    		name = "obstacle" + Integer.toString(ind);
+				setName("obstacle" + Integer.toString(index));
+    			initializeDimensions();
+				initializeLocation();
 
-    		wBound = centroidX - bufferX;
-    		eBound = centroidX + bufferX;
-    		nBound = centroidY - bufferY;
-    		sBound = centroidY + bufferY;
+    			for (int i = wBound; i <= eBound; i++) {
 
-    		for (int i = wBound; i <= eBound; i++) {
+    				for (int j = nBound; j <= sBound; j++) {
 
-    			for (int j = nBound; j <= sBound; j++) {
+    				    	getSpot(i,j).setObstacle(true);
+    				    	getSpot(i,j).setObstacleName(name);
+    				    	getSpot(i,j).setObstacleIndex(ind);
 
-    				world.getSpot(i,j).setObstacle(true);
-    				world.getSpot(i,j).setObstacleName(name);
-    				world.getSpot(i,j).setObstacleIndex(ind);
+    			    }
+    	        }
+    	    }
+
+        	private initializeDimensions() {
+
+            	Random random = new Random();
+            	int width;
+            	int height;
+
+    			width = random.nextInt(6);
+    	    	height = random.nextInt(6);
+
+    			if (width % 2 == 0 ) {
+
+    				width++;
 
     			}
 
+    			if (height % 2 == 0) {
+
+    				height++;
+
+    			}
+
+            	setWidth(width);
+            	setHeight(height);
+
+        	}
+
+        	private initializeLocation() {
+
+            	Random random = new Random();
+
+            	int bufferX = (getWidth() - 1)/2;//buffer is radius minus the centroid.
+    			int bufferY = (getHeight() - 1)/2;
+
+    			int centroidX = random.nextInt(world.getSizeX() - bufferX - 1);
+    			int centroidY = random.nextInt(world.getSizeY() - bufferX - 1);
+
+    			if (centroidX < 4) {
+
+    				centroidX = 4;
+
+    			}
+
+    			if (centroidY < 4) {
+
+    				centroidY = 4;
+
+    			}
+
+				initializeBounds(bufferX, bufferY);
+
+        	}
+
+			private initializeBounds(int bufferX, int bufferY) {
+
+				setWBound(getCentroidX() - bufferX);
+				setEBound(getCentroidX() + bufferX);
+				setNBound(getCentroidY() - bufferY);
+				setSBound(getCentroidY() + bufferY);
+
+			}
+
+    		public int getCentroidX() {
+
+    			return this.centroidX;
+
     		}
 
-    	}
+    		public int getCentroidY() {
 
-        private initializeDimensions() {
-
-            Random random = new Random();
-            int width;
-            int height;
-
-    		width = random.nextInt(5 + 1);
-    	    height = random.nextInt(5 + 1);
-
-    		if (width % 2 == 0 ) {
-
-    			width++;
+    			return this.centroidY;
 
     		}
 
-    		if (height % 2 == 0) {
+    		public int getWidth() {
 
-    			height++;
-
-    		}
-
-            setWidth(width);
-            setHeight(height);
-
-        }
-
-        private initializeLocation() {
-
-            Random random = new Random();
-
-            int bufferX = (getWidth() - 1)/2;//buffer is radius minus the centroid.
-    		int bufferY = (getHeight() - 1)/2;
-
-    		int centroidX = random.nextInt(world.getSizeX() - bufferX - 1);
-    		int centroidY = random.nextInt(world.getSizeY() - bufferX - 1);
-
-    		if (centroidX < 4) {
-
-    			centroidX = 4;
+    			return this.width;
 
     		}
 
-    		if (centroidY < 4) {
+    		public int getHeight() {
 
-    			centroidY = 4;
+    			return this.height;
 
     		}
 
-        }
+    		public String getName() {
 
-    	public int getCentroidX() {
+    			return this.name;
 
-    		return this.centroidX;
+    		}
 
-    	}
+    		public void setName(String name) {
 
-    	public int getCentroidY() {
+    			this.name = name;
 
-    		return this.centroidY;
+    		}
 
-    	}
+    		public void setFound() {
 
-    	public int getWidth() {
+    			this.found = true;
 
-    		return this.width;
+    		}
 
-    	}
+    		public int getWBound() {
 
-    	public int getHeight() {
+    			return this.wBound;
 
-    		return this.height;
+    		}
 
-    	}
+    		public int getEBound() {
 
-    	public String getName() {
+    			return this.eBound;
 
-    		return this.name;
+    		}
 
-    	}
+    		public int getNBound() {
 
-    	public void setName(String name) {
+    			return this.nBound;
 
-    		this.name = name;
+    		}
 
-    	}
+    		public int getSBound() {
 
-    	public void setFound() {
+    			return this.sBound;
 
-    		this.found = true;
+    		}
 
-    	}
+        	public void setHeight(int height) {
 
-    	public int getWBound() {
+            	this.height = height;
 
-    		return this.wBound;
+        	}
 
-    	}
+        	public void setWidth(int width) {
 
-    	public int getEBound() {
+            	this.width = width;
 
-    		return this.eBound;
+        	}
 
-    	}
+        	public void setNBound(nBound) {
 
-    	public int getNBound() {
+            	this.nBound = nBound;
 
-    		return this.nBound;
+        	}
 
-    	}
+        	public void setSBound(sBound) {
 
-    	public int getSBound() {
+            	this.sBound = sBound;
 
-    		return this.sBound;
+        	}
 
-    	}
+        	public void setEBound(eBound) {
 
-        public void setHeight(int height) {
+            	this.eBound = eBound;
 
-            this.height = height;
+        	}
 
-        }
+        	public void setWBound(wBound) {
 
-        public void setWidth(int width) {
+            	this.wBound = wBound;
 
-            this.width = width;
-
-        }
-
-    }
-
-    class World {
-
-
-
-    }
-
-    class Spot {
-
-        private boolean obstacle;
-    	private String obstName;
-    	private int obstIndex;
-    	private int xAddress;
-    	private int yAddress;
-
-    	Spot (int x, int y) {
-
-    		setObstacle(false);
-    		setObstacleName("");
-    		setObstacleIndex(0);
-    		setXAddress(x);
-    		setYAddress(y);
+        	}
 
     	}
 
-    	public boolean isObstacle() {
+    	class Spot {
 
-    		return obst;
+        	private boolean obstacle;
+    		private String obstName;
+    		private int obstIndex;
+    		private int xAddress;
+    		private int yAddress;
 
-    	}
+    		Spot (int x, int y) {
 
-    	public int getObstacleIndex() {
+    			setObstacle(false);
+    			setObstacleName("");
+    			setObstacleIndex(0);
+    			setXAddress(x);
+    			setYAddress(y);
 
-    		return obstIndex;
+    		}
 
-    	}
+    		public boolean isObstacle() {
 
-    	public String getObstacleName() {
+    			return obst;
 
-    		return obstName;
+    		}
 
-    	}
+    		public int getObstacleIndex() {
 
-    	public void setObstacle(boolean obstacle) {
+    			return obstIndex;
 
-    		this.obstacle = obstacle;
+    		}
 
-    	}
+    		public String getObstacleName() {
 
-    	public void setObstacleIndex(int index) {
+    			return obstName;
 
-    		obstIndex = index;
+    		}
 
-    	}
+    		public void setObstacle(boolean obstacle) {
 
-    	public void setObstacleName(String name) {
+    			this.obstacle = obstacle;
 
-    		obstName = name;
+    		}
 
-    	}
+    		public void setObstacleIndex(int index) {
 
-        public void setXAddress(int x) {
+    			obstIndex = index;
 
-            this.xAddress = x;
+    		}
 
-        }
+    		public void setObstacleName(String name) {
 
-        public void setYAddress(int y) {
+    			obstName = name;
 
-            this.yAddress = y;
+    		}
 
-        }
+        	public void setXAddress(int x) {
 
-        public int getXAddress() {
+            	this.xAddress = x;
 
-            return this.xAddress;
+        	}
 
-        }
+        	public void setYAddress(int y) {
 
-        public int getYAddress() {
+            	this.yAddress = y;
 
-            return this.yAddress;
+        	}
 
-        }
+        	public int getXAddress() {
 
+            	return this.xAddress;
+
+        	}
+
+        	public int getYAddress() {
+
+            	return this.yAddress;
+
+        	}
+		}
     }
 
 }
