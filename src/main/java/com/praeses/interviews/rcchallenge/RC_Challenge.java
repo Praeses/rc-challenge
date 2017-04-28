@@ -24,7 +24,104 @@ public class RC_Challenge {
 
         class Car {
 
+			private int xCoor;
+			private int yCoor;
+			private String heading;
+			private Boolean isForward;
+			private Boolean isBlocked;
 
+			Car(int xCoor, int yCoor, String heading, Boolean isForward,
+				Boolean isBlocked) {
+
+				setXCoor(xCoor);
+				setYCoor(yCoor);
+				setHeading(heading);
+				setIsForward(isForward);
+				setIsBlocked(isBlocked);
+
+			}
+
+			public void move(int distance) {
+
+				int nextSpot;
+
+				switch (getHeading()) {
+
+					case "north"
+
+				}
+
+			}
+
+			public void moveNorth(int distance) {
+
+				for(int position = 1; position <= distance; position++) {
+
+					
+
+				}
+
+			}
+
+			public void setXCoor(int xCoor) {
+
+				this.xCoor = xCoor;
+
+			}
+
+			public int getXCoor() {
+
+				return this.xCoor;
+
+			}
+
+			public void setYCoor(int yCoor) {
+
+				this.yCoor = yCoor;
+
+			}
+
+			public int getYCoor() {
+
+				return this.yCoor;
+
+			}
+
+			public void setHeading(String heading) {
+
+				this.xCoor = xCoor;
+
+			}
+
+			public String getHeading()) {
+
+				return this.heading;
+
+			}
+
+			public void setIsForward(Boolean isForward) {
+
+				this.isForward = isForward;
+
+			}
+
+			public Boolean getIsForward() {
+
+				return this.isForward;
+
+			}
+
+			public void setIsBlocked(Boolean isBlocked) {
+
+				this.isBlocked = isBlocked;
+
+			}
+
+			public Boolean getIsBlocked() {
+
+				return this.isBlocked;
+
+			}
 
         }
 
@@ -47,20 +144,30 @@ public class RC_Challenge {
     	    Obstacle(int index) {
 
 				setName("obstacle" + Integer.toString(index));
+				setIndex(index);
     			initializeDimensions();
 				initializeLocation();
 
-    			for (int i = wBound; i <= eBound; i++) {
 
-    				for (int j = nBound; j <= sBound; j++) {
+    	    }
 
-    				    	getSpot(i,j).setObstacle(true);
-    				    	getSpot(i,j).setObstacleName(name);
-    				    	getSpot(i,j).setObstacleIndex(ind);
+			private tagSpotsAsObstacle() {
+
+				for (int spotXCoor = getWBound(); spotXCoor <= getEBound();
+					spotXCoor++) {
+
+    				for (int spotYCoor = getNBound(); spotYCoor <= getSBound();
+						spotYCoor++) {
+
+    				    	getSpot(spotXCoor,spotYCoor).setObstacle(true);
+    				    	getSpot(spotXCoor,spotYCoor).
+								setObstacleName(getName());
+    				    	getSpot(spotXCoor,spotYCoor).
+								setObstacleIndex(getIndex());
 
     			    }
     	        }
-    	    }
+			}
 
         	private initializeDimensions() {
 
@@ -158,6 +265,18 @@ public class RC_Challenge {
     			this.name = name;
 
     		}
+
+			public int getIndex() {
+
+				return this.index;
+
+			}
+
+			public void setIndex(int index) {
+
+				this.index = index;
+
+			}
 
     		public void setFound() {
 
@@ -306,5 +425,4 @@ public class RC_Challenge {
         	}
 		}
     }
-
 }
