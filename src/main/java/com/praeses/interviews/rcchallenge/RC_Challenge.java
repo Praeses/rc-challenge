@@ -22,8 +22,8 @@ public class RC_Challenge {
 
     class World {
 
-		private int sizeX 					= 100;
-		private int sizeY 					= 100;
+		private int sizeX 					= 50;
+		private int sizeY 					= 50;
 		private int obstacleCount			= 5;
 		private Spot[][] spotGrid 			= new Spot[sizeX][sizeY];
 		private List<Obstacle> obstacles 	= new ArrayList<Obstacle>();
@@ -182,6 +182,8 @@ public class RC_Challenge {
 					+ getCar().getHeadingString());
 				System.out.println("Is the car blocked? "
 					+ getCar().getIsBlocked());
+				System.out.println("The blocking obstacle is: "
+					+getCar().getBlockedName());
 
 				System.out.println();
 
@@ -206,6 +208,7 @@ public class RC_Challenge {
 			private int[][] heading 	= {{0,-1},{1,0},{0,1},{-1,0}};
 			private int headingSelector = 0;
 			private Boolean isBlocked 	= false;
+			private String blockedName	= "";
 
 			Car(int xCoor, int yCoor) {
 
@@ -257,6 +260,8 @@ public class RC_Challenge {
 				if(getSpot(nextSpotX, nextSpotY).isObstacle()) {
 
 					setIsBlocked(true);
+					setBlockedName(getSpot(nextSpotX,
+						nextSpotY).getObstacleName());
 					return false;
 
 				}
@@ -264,6 +269,7 @@ public class RC_Challenge {
 				setXCoor(nextSpotX);
 				setYCoor(nextSpotY);
 				setIsBlocked(false);
+				setBlockedName("");
 				return true;
 
 			}
@@ -376,6 +382,18 @@ public class RC_Challenge {
 				return this.isBlocked;
 
 			}
+
+			public String getBlockedName() {
+
+				return this.blockedName;
+
+			}
+
+			public void setBlockedName(String blockedName) {
+
+				this.blockedName = blockedName;
+
+			}
         }
 
         public class Obstacle {
@@ -400,9 +418,23 @@ public class RC_Challenge {
 				setIndex(index);
     			initializeDimensions();
 				initializeLocation();
-
+				printObstInfo();
+				tagSpotsAsObstacle();
 
     	    }
+
+			private void printObstInfo() {
+
+				System.out.println(getName());
+				System.out.println("nbound - " + getNBound());
+				System.out.println("sbound - " + getSBound());
+				System.out.println("ebound - " + getEBound());
+				System.out.println("wbound - " + getWBound());
+				System.out.println("xCentroid - " + getCentroidX());
+				System.out.println("yCentroid - " + getCentroidY());
+				System.out.println();
+
+			}
 
 			private void tagSpotsAsObstacle() {
 
@@ -428,8 +460,8 @@ public class RC_Challenge {
             	int width;
             	int height;
 
-    			width = random.nextInt(6);
-    	    	height = random.nextInt(6);
+    			width = random.nextInt(5);
+    	    	height = random.nextInt(5);
 
     			if (width % 2 == 0 ) {
 
@@ -456,7 +488,7 @@ public class RC_Challenge {
     			int bufferY = (getHeight() - 1)/2;
 
     			int centroidX = random.nextInt(getWorldSizeX() - bufferX - 1);
-    			int centroidY = random.nextInt(getWorldSizeY() - bufferX - 1);
+    			int centroidY = random.nextInt(getWorldSizeY() - bufferY - 1);
 
     			if (centroidX < 4) {
 
@@ -469,6 +501,9 @@ public class RC_Challenge {
     				centroidY = 4;
 
     			}
+
+				setCentroidX(centroidX);
+				setCentroidY(centroidY);
 
 				initializeBounds(bufferX, bufferY);
 
@@ -494,6 +529,18 @@ public class RC_Challenge {
     			return this.centroidY;
 
     		}
+
+			public void setCentroidX(int centroidX) {
+
+				this.centroidX = centroidX;
+
+			}
+
+			public void setCentroidY(int centroidY) {
+
+				this.centroidY = centroidY;
+
+			}
 
     		public int getWidth() {
 
