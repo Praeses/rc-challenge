@@ -28,6 +28,7 @@ public class RC_Challenge {
 		Spot[][] spotGrid 			= new Spot[sizeX][sizeY];
 		List<Obstacle> obstacles 	= new ArrayList<Obstacle>();
 		Car car;
+		Interface ui				= new Interface();
 
 		World() {
 
@@ -47,6 +48,8 @@ public class RC_Challenge {
 			}
 
 			getCar() = new Car(findCarStartXPosition(), 0);
+
+
 
 		}
 
@@ -71,6 +74,12 @@ public class RC_Challenge {
 		public getCar() {
 
 			return this.car;
+
+		}
+
+		public getUI() {
+
+			return this.ui;
 
 		}
 
@@ -115,6 +124,45 @@ public class RC_Challenge {
 
 			}
 
+			public String userInputString() {
+
+	            Scanner scanner = new Scanner(System.in);
+	            return scanner.next();
+
+	        }
+
+			public void getUserInput() {
+
+				Boolean validInput = false;
+
+				while(!validInput) {
+
+					switch(userInputString()) {
+
+						case "w":
+
+							getCar().move(true);
+
+						case "a":
+
+							getCar().setHeadingSelector("left");
+
+						case "s":
+
+							getCar().move(false);
+
+						case "d":
+
+							getCar().setHeadingSelector("right");
+
+						case "exit":
+
+							System.exit(0);
+
+					}
+				}
+			}
+
 			public void printConsoleUI() {
 
 				clearConsole();
@@ -129,8 +177,8 @@ public class RC_Challenge {
 
 				System.out.println();
 
-				System.out.print("w - forward, s - back, a - left, d - right");
-
+				System.out.println("w - forward, s - back, a - left, d - right");
+				System.out.println("exit - quit the program");
 
 			}
 
