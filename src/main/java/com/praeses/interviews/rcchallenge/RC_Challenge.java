@@ -27,8 +27,8 @@ public class RC_Challenge {
 		private int obstacleCount			= 5;
 		private Spot[][] spotGrid 			= new Spot[sizeX][sizeY];
 		private List<Obstacle> obstacles 	= new ArrayList<Obstacle>();
-		private Car car;
-		private Interface ui				= new Interface();
+		public Car car;
+		private Interface ui;
 
 		World() {
 
@@ -47,9 +47,9 @@ public class RC_Challenge {
 
 			}
 
-			car = new Car(findCarStartXPosition(), 0);
+			this.car = new Car(findCarStartXPosition(), 0);
 
-
+		 	this.ui = new Interface();
 
 		}
 
@@ -121,6 +121,7 @@ public class RC_Challenge {
 			Interface() {
 
 				printConsoleUI();
+				getUserInput();
 
 			}
 
@@ -141,25 +142,32 @@ public class RC_Challenge {
 
 						case "w":
 
-							getCar().move(true);
+							car.move(true);
+							break;
 
 						case "a":
 
-							getCar().setHeadingSelector("left");
+							car.setHeadingSelector("left");
+							break;
 
 						case "s":
 
-							getCar().move(false);
+							car.move(false);
+							break;
 
 						case "d":
 
-							getCar().setHeadingSelector("right");
+							car.setHeadingSelector("right");
+							break;
 
 						case "exit":
 
 							System.exit(0);
 
 					}
+
+					printConsoleUI();
+
 				}
 			}
 
@@ -204,6 +212,9 @@ public class RC_Challenge {
 				setXCoor(xCoor);
 				setYCoor(yCoor);
 
+				System.out.println("" + getXCoor());
+				System.out.println("" + getYCoor());
+
 			}
 
 			public Boolean move(Boolean forward) {
@@ -220,13 +231,6 @@ public class RC_Challenge {
 
 					nextSpotX = getXCoor() - getXHeading();
 					nextSpotY = getYCoor() - getYHeading();
-
-				}
-
-				if(getSpot(nextSpotX, nextSpotY).isObstacle()) {
-
-					setIsBlocked(true);
-					return false;
 
 				}
 
@@ -247,6 +251,13 @@ public class RC_Challenge {
 				} else if(nextSpotY < 0) {
 
 					nextSpotY = getWorldSizeY() - 1;
+
+				}
+
+				if(getSpot(nextSpotX, nextSpotY).isObstacle()) {
+
+					setIsBlocked(true);
+					return false;
 
 				}
 
