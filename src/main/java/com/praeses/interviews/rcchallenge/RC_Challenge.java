@@ -16,50 +16,196 @@ public class RC_Challenge {
 
     RC_Challenge() {
 
-
+		World world = new World();
 
     }
 
     class World {
 
+		int sizeX 					= 100;
+		int sizeY 					= 100;
+		int numberOfObstacles		= 5;
+		Spot[][] spotGrid 			= new Spot[sizeX][sizeY];
+		List<Obstacle> obstacles 	= new ArrayList<Obstacle>();
+		Car car;
+
+		World() {
+
+			for (int xSpot = 0; xSpot < getSizeX(); xSpot++) {
+
+				for (int ySpot = 0; ySpot < getSizeY(); ySpot++) {
+
+					getSpot(xSpot,ySpot) = new Spot(xSpot,ySpot);
+
+				}
+			}
+
+			for(int obstIndex = 0; obstIndex < getObstacleCount(); obstIndex++) {
+
+				getObstacleList().add(new Obstacle(obstIndex));
+
+			}
+
+			getCar() = new Car(findCarStartXPosition(), 0);
+
+		}
+
+		public Spot getSpot(int xCoor, int yCoor) {
+
+			return this.spotGrid[xCoor][yCoor];
+
+		}
+
+		public Spot[][] getSpotArray() {
+
+			return this.spotGrid;
+
+		}
+
+		public List<Obstacle> getObstacleList() {
+
+			return this.obstacles;
+
+		}
+
+		public getCar() {
+
+			return this.car;
+
+		}
+
+		public int getWorldSizeX() {
+
+			return this.sizeX;
+
+		}
+
+		public int getWorldSizeY() {
+
+			return this.sizeY;
+
+		}
+
+		public int getObstacleCount() {
+
+			return this.obstacleCount;
+
+		}
+
+		public int findCarStartXPosition() {
+
+			int xPos = 0;
+			int yPos = 0;
+
+			while(getSpot(xPos, yPos).isObstacle()) {
+
+				xPos++;
+
+			}
+
+			return xPos;
+
+		}
+
+		class Interface() {
+
+			Interface() {
+
+				printConsoleUI();
+
+			}
+
+			public void printConsoleUI() {
+
+				clearConsole();
+
+				System.out.println("Car's Position is:  ("
+					+ getCar().getXCoor().toString() + " , "
+					+ getCar().getYCoor().toString() + ")");
+				System.out.println("The car is currently facing: "
+					+ getCar().getHeadingString());
+				System.out.println("Is the car blocked? "
+					+ getCar().getIsBlocked().toString());
+
+				System.out.println();
+
+				System.out.print("w - forward, s - back, a - left, d - right");
+
+
+			}
+
+			public void clearConsole() {
+
+				System.out.print("\033[H\033[2J");
+    			System.out.flush();
+
+			}
+
+		}
+
         class Car {
 
 			private int xCoor;
 			private int yCoor;
-			private String heading;
-			private Boolean isForward;
-			private Boolean isBlocked;
+			private int[][] heading 	= {0,-1},{1,0},{0,1},{-1,0};
+			private int headingSelector = 0;
+			private Boolean isBlocked 	= false;
 
-			Car(int xCoor, int yCoor, String heading, Boolean isForward,
-				Boolean isBlocked) {
+			Car(int xCoor, int yCoor) {
 
 				setXCoor(xCoor);
 				setYCoor(yCoor);
-				setHeading(heading);
-				setIsForward(isForward);
-				setIsBlocked(isBlocked);
 
 			}
 
-			public void move(int distance) {
+			public Boolean move(Boolean forward) {
 
-				int nextSpot;
+				int nextSpotX;
+				int nextSpotY;
 
-				switch (getHeading()) {
+				if(forward) {
 
-					case "north"
+					nextSpotX = getXCoor() + getXHeading();
+					nextSpotY = getYCoor() + getYHeading();
+
+				} else {
+
+					nextSpotX = getXCoor() - getXHeading();
+					nextSpotY = getYCoor() - getYHeading();
+
+				}
+
+				if(getSpot(nextSpotX, nextSpotY).isObstacle()) {
+
+					setIsBlocked(true);
+					return false;
 
 				}
 
-			}
+				if(nextSpotX >= getWorldSizeX()) {
 
-			public void moveNorth(int distance) {
+					nextSpotX = 0;
 
-				for(int position = 1; position <= distance; position++) {
+				} else if(nextSpotX < 0) {
 
-					
+					nextSpotX = getWorldSizeX() - 1;
 
 				}
+
+				if(nextSpotY >= getWorldSizeY()) {
+
+					nextSpotY = 0;
+
+				} else if(nextSpotY < 0) {
+
+					nextSpotY = getWorldSizeY() - 1;
+
+				}
+
+				setXCoor(nextSpotX);
+				setYCoor(nextSpotY);
+				setIsBlocked(false);
+				return true;
 
 			}
 
@@ -87,27 +233,76 @@ public class RC_Challenge {
 
 			}
 
-			public void setHeading(String heading) {
+			public void setHeadingSelector(String leftOrRight) {
 
-				this.xCoor = xCoor;
+				if(leftOrRight.equals("right")) {
+
+					if(this.headingSelector >= 3) {
+
+						this.headingSelector = 0;
+
+					} else {
+
+						this.headingSelector++;
+
+					}
+				} else if(leftOrRight.equals("left")) {
+
+					if(this.headingSelector <= 0) {
+
+						this.headingSelector = 3;
+
+					} else {
+
+						this.headingSelector--;
+
+					}
+				}
+			}
+
+			public int getXHeading() {
+
+				return this.heading[getHeadingSelector()][0];
 
 			}
 
-			public String getHeading()) {
+			public int getYHeading() {
 
-				return this.heading;
-
-			}
-
-			public void setIsForward(Boolean isForward) {
-
-				this.isForward = isForward;
+				return this.heading[getHeadingSelector()][1];
 
 			}
 
-			public Boolean getIsForward() {
+			public int getHeadingSelector() {
 
-				return this.isForward;
+				return this.headingSelector;
+
+			}
+
+			public String getHeadingString() {
+
+				String heading;
+
+				switch(getHeadingSelector()) {
+
+					case 0:
+
+						return "north";
+
+					case 1:
+
+						return "east";
+
+					case 2:
+
+						return "south";
+
+					case 3:
+
+						return "west";
+
+				}
+
+				return "error";
 
 			}
 
@@ -122,7 +317,6 @@ public class RC_Challenge {
 				return this.isBlocked;
 
 			}
-
         }
 
         class Obstacle {
@@ -202,8 +396,8 @@ public class RC_Challenge {
             	int bufferX = (getWidth() - 1)/2;//buffer is radius minus the centroid.
     			int bufferY = (getHeight() - 1)/2;
 
-    			int centroidX = random.nextInt(world.getSizeX() - bufferX - 1);
-    			int centroidY = random.nextInt(world.getSizeY() - bufferX - 1);
+    			int centroidX = random.nextInt(getWorldSizeX() - bufferX - 1);
+    			int centroidY = random.nextInt(getWorldSizeY() - bufferX - 1);
 
     			if (centroidX < 4) {
 
