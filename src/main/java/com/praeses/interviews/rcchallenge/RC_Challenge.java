@@ -461,6 +461,16 @@ public class RC_Challenge {
 				this.blockedName = blockedName;
 
 			}
+
+            public void findAnObstacle() {
+
+                while(!getIsBlocked()) {
+
+                    move();
+
+                }
+
+            }
         }
 
         /** Obstacle class represents the obstacles on the grid. They are
