@@ -10,7 +10,7 @@ public class RC_Challenge {
 
     public static void main(String[] args) {
 
-        RC-Challenge rc = new RC-Challenge();
+        RC_Challenge rc = new RC_Challenge();
 
     }
 
@@ -22,21 +22,21 @@ public class RC_Challenge {
 
     class World {
 
-		int sizeX 					= 100;
-		int sizeY 					= 100;
-		int numberOfObstacles		= 5;
-		Spot[][] spotGrid 			= new Spot[sizeX][sizeY];
-		List<Obstacle> obstacles 	= new ArrayList<Obstacle>();
-		Car car;
-		Interface ui				= new Interface();
+		private int sizeX 					= 100;
+		private int sizeY 					= 100;
+		private int obstacleCount			= 5;
+		private Spot[][] spotGrid 			= new Spot[sizeX][sizeY];
+		private List<Obstacle> obstacles 	= new ArrayList<Obstacle>();
+		private Car car;
+		private Interface ui				= new Interface();
 
 		World() {
 
-			for (int xSpot = 0; xSpot < getSizeX(); xSpot++) {
+			for (int xSpot = 0; xSpot < getWorldSizeX(); xSpot++) {
 
-				for (int ySpot = 0; ySpot < getSizeY(); ySpot++) {
+				for (int ySpot = 0; ySpot < getWorldSizeY(); ySpot++) {
 
-					getSpot(xSpot,ySpot) = new Spot(xSpot,ySpot);
+					spotGrid[xSpot][ySpot] = new Spot(xSpot,ySpot);
 
 				}
 			}
@@ -47,7 +47,7 @@ public class RC_Challenge {
 
 			}
 
-			getCar() = new Car(findCarStartXPosition(), 0);
+			car = new Car(findCarStartXPosition(), 0);
 
 
 
@@ -71,13 +71,13 @@ public class RC_Challenge {
 
 		}
 
-		public getCar() {
+		public Car getCar() {
 
 			return this.car;
 
 		}
 
-		public getUI() {
+		public Interface getUI() {
 
 			return this.ui;
 
@@ -116,7 +116,7 @@ public class RC_Challenge {
 
 		}
 
-		class Interface() {
+		public class Interface {
 
 			Interface() {
 
@@ -168,12 +168,12 @@ public class RC_Challenge {
 				clearConsole();
 
 				System.out.println("Car's Position is:  ("
-					+ getCar().getXCoor().toString() + " , "
-					+ getCar().getYCoor().toString() + ")");
+					+ getCar().getXCoor() + " , "
+					+ getCar().getYCoor() + ")");
 				System.out.println("The car is currently facing: "
 					+ getCar().getHeadingString());
 				System.out.println("Is the car blocked? "
-					+ getCar().getIsBlocked().toString());
+					+ getCar().getIsBlocked());
 
 				System.out.println();
 
@@ -191,11 +191,11 @@ public class RC_Challenge {
 
 		}
 
-        class Car {
+        public class Car {
 
 			private int xCoor;
 			private int yCoor;
-			private int[][] heading 	= {0,-1},{1,0},{0,1},{-1,0};
+			private int[][] heading 	= {{0,-1},{1,0},{0,1},{-1,0}};
 			private int headingSelector = 0;
 			private Boolean isBlocked 	= false;
 
@@ -367,7 +367,7 @@ public class RC_Challenge {
 			}
         }
 
-        class Obstacle {
+        public class Obstacle {
 
             private int centroidX;
     	    private int centroidY;
@@ -393,7 +393,7 @@ public class RC_Challenge {
 
     	    }
 
-			private tagSpotsAsObstacle() {
+			private void tagSpotsAsObstacle() {
 
 				for (int spotXCoor = getWBound(); spotXCoor <= getEBound();
 					spotXCoor++) {
@@ -411,7 +411,7 @@ public class RC_Challenge {
     	        }
 			}
 
-        	private initializeDimensions() {
+        	private void initializeDimensions() {
 
             	Random random = new Random();
             	int width;
@@ -437,7 +437,7 @@ public class RC_Challenge {
 
         	}
 
-        	private initializeLocation() {
+        	private void initializeLocation() {
 
             	Random random = new Random();
 
@@ -463,7 +463,7 @@ public class RC_Challenge {
 
         	}
 
-			private initializeBounds(int bufferX, int bufferY) {
+			private void initializeBounds(int bufferX, int bufferY) {
 
 				setWBound(getCentroidX() - bufferX);
 				setEBound(getCentroidX() + bufferX);
@@ -562,25 +562,25 @@ public class RC_Challenge {
 
         	}
 
-        	public void setNBound(nBound) {
+        	public void setNBound(int nBound) {
 
             	this.nBound = nBound;
 
         	}
 
-        	public void setSBound(sBound) {
+        	public void setSBound(int sBound) {
 
             	this.sBound = sBound;
 
         	}
 
-        	public void setEBound(eBound) {
+        	public void setEBound(int eBound) {
 
             	this.eBound = eBound;
 
         	}
 
-        	public void setWBound(wBound) {
+        	public void setWBound(int wBound) {
 
             	this.wBound = wBound;
 
@@ -588,7 +588,7 @@ public class RC_Challenge {
 
     	}
 
-    	class Spot {
+    	public class Spot {
 
         	private boolean obstacle;
     		private String obstName;
@@ -608,19 +608,19 @@ public class RC_Challenge {
 
     		public boolean isObstacle() {
 
-    			return obst;
+    			return this.obstacle;
 
     		}
 
     		public int getObstacleIndex() {
 
-    			return obstIndex;
+    			return this.obstIndex;
 
     		}
 
     		public String getObstacleName() {
 
-    			return obstName;
+    			return this.obstName;
 
     		}
 
@@ -632,13 +632,13 @@ public class RC_Challenge {
 
     		public void setObstacleIndex(int index) {
 
-    			obstIndex = index;
+    			this.obstIndex = index;
 
     		}
 
     		public void setObstacleName(String name) {
 
-    			obstName = name;
+    			this.obstName = name;
 
     		}
 
