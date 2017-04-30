@@ -180,7 +180,7 @@ public class RC_Challenge {
 
 						case "a":
 
-							car.setHeadingSelector("left");
+							car.turn("left");
 							break;
 
 						case "s":
@@ -190,8 +190,13 @@ public class RC_Challenge {
 
 						case "d":
 
-							car.setHeadingSelector("right");
+							car.turn("right");
 							break;
+
+                        case "hunt":
+
+                            car.findAnObstacle();
+                            break;
 
 						case "exit":
 
@@ -206,7 +211,7 @@ public class RC_Challenge {
 
 			public void printConsoleUI() {
 
-				//clearConsole();
+				clearConsole();
 
 				System.out.println("Car's Position is:  ("
 					+ getCar().getXCoor() + " , "
@@ -221,6 +226,7 @@ public class RC_Challenge {
 				System.out.println();
 
 				System.out.println("w - forward, s - back, a - left, d - right");
+                System.out.println("hunt - auto-pilot to find an obstacle");
 				System.out.println("exit - quit the program");
 
 			}
@@ -365,32 +371,41 @@ public class RC_Challenge {
             the user requested a left or right turn. Right turns are ++ and
             left turns are --. Obviously the selector value must be kept in
             range of the array. **/
-			public void setHeadingSelector(String leftOrRight) {
+			public void turn(String leftOrRight) {
 
 				if(leftOrRight.equals("right")) {
 
-					if(this.headingSelector >= 3) {
+					if(getHeadingSelector() >= 3) {
 
-						this.headingSelector = 0;
+						setHeadingSelector(0);
 
 					} else {
 
-						this.headingSelector++;
+						setHeadingSelector(getHeadingSelector() + 1);
 
 					}
 				} else if(leftOrRight.equals("left")) {
 
-					if(this.headingSelector <= 0) {
+					if(getHeadingSelector() <= 0) {
 
-						this.headingSelector = 3;
+						setHeadingSelector(3);
 
 					} else {
 
-						this.headingSelector--;
+						setHeadingSelector(getHeadingSelector() - 1);
 
 					}
 				}
 			}
+
+            public void setHeadingSelector(int heading) {
+
+                if(heading >= 0 && heading <= 3) {
+
+                    this.headingSelector = heading;
+
+                }
+            }
 
 			public int getXHeading() {
 
@@ -464,12 +479,24 @@ public class RC_Challenge {
 
             public void findAnObstacle() {
 
+                int numberConsecutiveMoves = 0;
+
+                setHeadingSelector(1);
+
                 while(!getIsBlocked()) {
 
-                    move();
+                    move(true);
+                    numberConsecutiveMoves++;
 
+                    if(numberConsecutiveMoves >= getWorldSizeX()) {
+
+                        turn("right");
+                        move(true);
+                        turn("left");
+                        numberConsecutiveMoves = 0;
+
+                    }
                 }
-
             }
         }
 
