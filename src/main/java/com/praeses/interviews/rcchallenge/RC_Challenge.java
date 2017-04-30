@@ -1,11 +1,19 @@
 package com.praeses.interviews.rcchallenge;
 
+/** RC_Challenge is a skill demonstration project. It's a simple game like
+car program that simulates a car on a 2D grid with obstacles. The standard
+controls used are W,A,S,D just like most PC games involving movement. However,
+after each input "enter" must be pressed. The grid size is 50x50 (x,y) and has
+5 randomly placed/sized obstacles. **/
+
 import java.io.*;
 import java.util.*;
 import java.lang.System.*;
 import java.lang.Integer;
 import java.lang.Math;
 
+/** RC_Challenge is the outer class that holds the main() method and creates
+the World object. **/
 public class RC_Challenge {
 
     public static void main(String[] args) {
@@ -20,6 +28,9 @@ public class RC_Challenge {
 
     }
 
+    /** World is the controller class. It creates and holds all object
+    references. Additionally, it defines some basic characteristics of the world
+    like the size of the x,y plane and the number of obstacles. **/
     class World {
 
 		private int sizeX 					= 50;
@@ -32,7 +43,16 @@ public class RC_Challenge {
 
 		World() {
 
-			for (int xSpot = 0; xSpot < getWorldSizeX(); xSpot++) {
+		 	spotCreate();
+            obstacleCreate();
+            carCreate();
+            interfaceCreate();
+
+		}
+
+        private void spotCreate() {
+
+            for (int xSpot = 0; xSpot < getWorldSizeX(); xSpot++) {
 
 				for (int ySpot = 0; ySpot < getWorldSizeY(); ySpot++) {
 
@@ -40,18 +60,29 @@ public class RC_Challenge {
 
 				}
 			}
+        }
 
-			for(int obstIndex = 0; obstIndex < getObstacleCount(); obstIndex++) {
+        private void obstacleCreate() {
+
+            for(int obstIndex = 0; obstIndex < getObstacleCount(); obstIndex++) {
 
 				getObstacleList().add(new Obstacle(obstIndex));
 
 			}
 
-			this.car = new Car(findCarStartXPosition(), 0);
+        }
 
-		 	this.ui = new Interface();
+        private void carCreate() {
 
-		}
+            this.car = new Car(findCarStartXPosition(), 0);
+
+        }
+
+        private void interfaceCreate() {
+
+            this.ui = new Interface();
+
+        }
 
 		public Spot getSpot(int xCoor, int yCoor) {
 
@@ -101,6 +132,7 @@ public class RC_Challenge {
 
 		}
 
+        //Finds a non-obstacle occupied position for the car to start at.
 		public int findCarStartXPosition() {
 
 			int xPos = 0;
@@ -116,6 +148,7 @@ public class RC_Challenge {
 
 		}
 
+        /** Interface class handles all user interaction. **/
 		public class Interface {
 
 			Interface() {
@@ -134,9 +167,9 @@ public class RC_Challenge {
 
 			public void getUserInput() {
 
-				Boolean validInput = false;
+				Boolean quit = false;
 
-				while(!validInput) {
+				while(!quit) {
 
 					switch(userInputString()) {
 
@@ -147,7 +180,7 @@ public class RC_Challenge {
 
 						case "a":
 
-							car.setHeadingSelector("left");
+							car.turn("left");
 							break;
 
 						case "s":
@@ -157,12 +190,17 @@ public class RC_Challenge {
 
 						case "d":
 
-							car.setHeadingSelector("right");
+							car.turn("right");
 							break;
+
+                        case "hunt":
+
+                            car.findAnObstacle();
+                            break;
 
 						case "exit":
 
-							System.exit(0);
+							quit = true;
 
 					}
 
@@ -188,6 +226,7 @@ public class RC_Challenge {
 				System.out.println();
 
 				System.out.println("w - forward, s - back, a - left, d - right");
+                System.out.println("hunt - auto-pilot to find an obstacle");
 				System.out.println("exit - quit the program");
 
 			}
@@ -201,6 +240,18 @@ public class RC_Challenge {
 
 		}
 
+        /** Car class is the car being manipulated by the user. The heading or
+        direction the car is facing is represented by a 2D array and a selector
+        value for 1 dimension of that array. The first dimension of the heading
+        array is 4 addresses in size and each address represents a direction
+        (north, south, east, west). As the car is turned left and right, the
+        selector value is shifted up or down by 1, thus selecting the new
+        heading. The 2nd dimension that describes the heading selected is just
+        a pair of values (x,y) or (north/south,east/west). One value will be 0
+        and the other either 1 or -1. The upper left (northwest) corner is the
+        (0,0) position on the grid. So, if the selector value is 0, north is
+        selected. North's value pair is {0,-1} which means it will move 0
+        spaces in the X axis and move -1 in the y axis. **/
         public class Car {
 
 			private int xCoor;
@@ -215,12 +266,16 @@ public class RC_Challenge {
 				setXCoor(xCoor);
 				setYCoor(yCoor);
 
-				System.out.println("" + getXCoor());
-				System.out.println("" + getYCoor());
-
 			}
 
-			public Boolean move(Boolean forward) {
+            /** Adds or subtracts the heading value pair depending on if the
+            user moved the car forward or back. Then checks if the movement is
+            out of bonds and wraps the value if so. Then checks if the movement
+            is blocked by an obstacle and sets the isBlocked flag and blocking
+            obstacle name if so. Finally, if there is no blocking obstacle, the
+            car's position is updated and the isBlocked flag/blocking
+            obstacle name are reset to default values. **/
+			public void move(Boolean forward) {
 
 				int nextSpotX;
 				int nextSpotY;
@@ -237,7 +292,28 @@ public class RC_Challenge {
 
 				}
 
-				if(nextSpotX >= getWorldSizeX()) {
+				nextSpotX = xAxisEdgeWrapping(nextSpotX);
+				nextSpotY = yAxisEdgeWrapping(nextSpotY);
+
+				if(getSpot(nextSpotX, nextSpotY).isObstacle()) {
+
+					setIsBlocked(true);
+					setBlockedName(getSpot(nextSpotX,
+						nextSpotY).getObstacleName());
+                    return;
+
+				}
+
+				setXCoor(nextSpotX);
+				setYCoor(nextSpotY);
+				setIsBlocked(false);
+				setBlockedName("");
+
+			}
+
+            private int xAxisEdgeWrapping(int nextSpotX) {
+
+                if(nextSpotX >= getWorldSizeX()) {
 
 					nextSpotX = 0;
 
@@ -247,7 +323,13 @@ public class RC_Challenge {
 
 				}
 
-				if(nextSpotY >= getWorldSizeY()) {
+                return nextSpotX;
+
+            }
+
+            private int yAxisEdgeWrapping(int nextSpotY) {
+
+                if(nextSpotY >= getWorldSizeY()) {
 
 					nextSpotY = 0;
 
@@ -257,22 +339,9 @@ public class RC_Challenge {
 
 				}
 
-				if(getSpot(nextSpotX, nextSpotY).isObstacle()) {
+                return nextSpotY;
 
-					setIsBlocked(true);
-					setBlockedName(getSpot(nextSpotX,
-						nextSpotY).getObstacleName());
-					return false;
-
-				}
-
-				setXCoor(nextSpotX);
-				setYCoor(nextSpotY);
-				setIsBlocked(false);
-				setBlockedName("");
-				return true;
-
-			}
+            }
 
 			public void setXCoor(int xCoor) {
 
@@ -298,32 +367,45 @@ public class RC_Challenge {
 
 			}
 
-			public void setHeadingSelector(String leftOrRight) {
+            /** The car's heading selector value is -- or ++ depending on if
+            the user requested a left or right turn. Right turns are ++ and
+            left turns are --. Obviously the selector value must be kept in
+            range of the array. **/
+			public void turn(String leftOrRight) {
 
 				if(leftOrRight.equals("right")) {
 
-					if(this.headingSelector >= 3) {
+					if(getHeadingSelector() >= 3) {
 
-						this.headingSelector = 0;
+						setHeadingSelector(0);
 
 					} else {
 
-						this.headingSelector++;
+						setHeadingSelector(getHeadingSelector() + 1);
 
 					}
 				} else if(leftOrRight.equals("left")) {
 
-					if(this.headingSelector <= 0) {
+					if(getHeadingSelector() <= 0) {
 
-						this.headingSelector = 3;
+						setHeadingSelector(3);
 
 					} else {
 
-						this.headingSelector--;
+						setHeadingSelector(getHeadingSelector() - 1);
 
 					}
 				}
 			}
+
+            public void setHeadingSelector(int heading) {
+
+                if(heading >= 0 && heading <= 3) {
+
+                    this.headingSelector = heading;
+
+                }
+            }
 
 			public int getXHeading() {
 
@@ -394,10 +476,43 @@ public class RC_Challenge {
 				this.blockedName = blockedName;
 
 			}
+
+            public void findAnObstacle() {
+
+                int numberConsecutiveMoves = 0;
+
+                setHeadingSelector(1);
+
+                while(!getIsBlocked()) {
+
+                    move(true);
+                    numberConsecutiveMoves++;
+
+                    if(numberConsecutiveMoves >= getWorldSizeX()) {
+
+                        turn("right");
+                        move(true);
+                        turn("left");
+                        numberConsecutiveMoves = 0;
+
+                    }
+                }
+            }
         }
 
+        /** Obstacle class represents the obstacles on the grid. They are
+        always an odd width and height. This enables simple location of the
+        obstacles via their centroid. With dimensions and a centroid, the
+        bounds of the obstacle are defined. Finally, all the Spots within the
+        area of the obstacle are tagged as belonging to that obstacle.
+        Additionally, each obstacle is named and has an index value for use
+        with its reference array in the World class. There is care given so
+        that obstacles do not overlap the edge of the grid. So they are always
+        placed sufficiently far away from the edge relative to their max
+        size. **/
         public class Obstacle {
 
+            private int maxWidth = 5;
             private int centroidX;
     	    private int centroidY;
     	    private int width;
@@ -418,23 +533,9 @@ public class RC_Challenge {
 				setIndex(index);
     			initializeDimensions();
 				initializeLocation();
-				printObstInfo();
 				tagSpotsAsObstacle();
 
     	    }
-
-			private void printObstInfo() {
-
-				System.out.println(getName());
-				System.out.println("nbound - " + getNBound());
-				System.out.println("sbound - " + getSBound());
-				System.out.println("ebound - " + getEBound());
-				System.out.println("wbound - " + getWBound());
-				System.out.println("xCentroid - " + getCentroidX());
-				System.out.println("yCentroid - " + getCentroidY());
-				System.out.println();
-
-			}
 
 			private void tagSpotsAsObstacle() {
 
@@ -460,8 +561,8 @@ public class RC_Challenge {
             	int width;
             	int height;
 
-    			width = random.nextInt(5);
-    	    	height = random.nextInt(5);
+    			width = random.nextInt(getMaxWidth());
+    	    	height = random.nextInt(getMaxWidth());
 
     			if (width % 2 == 0 ) {
 
@@ -490,15 +591,15 @@ public class RC_Challenge {
     			int centroidX = random.nextInt(getWorldSizeX() - bufferX - 1);
     			int centroidY = random.nextInt(getWorldSizeY() - bufferY - 1);
 
-    			if (centroidX < 4) {
+    			if (centroidX < bufferX + 1) {
 
-    				centroidX = 4;
+    				centroidX = bufferX + 1;
 
     			}
 
-    			if (centroidY < 4) {
+    			if (centroidY < bufferY + 1) {
 
-    				centroidY = 4;
+    				centroidY = bufferY + 1;
 
     			}
 
@@ -644,8 +745,19 @@ public class RC_Challenge {
 
         	}
 
+            private int getMaxWidth() {
+
+                return this.maxWidth;
+
+            }
+
     	}
 
+        /** Spot class represents a specific point on the grid. So, each point
+        on the World's x,y grid is defined by an object with attributes.
+        Primarily, this enables the easy detection of obstacles. Any Spot that
+        is the location of an Obstacle is flagged as such enabling the Car to
+        check each Spot for Obstacles. **/
     	public class Spot {
 
         	private boolean obstacle;
