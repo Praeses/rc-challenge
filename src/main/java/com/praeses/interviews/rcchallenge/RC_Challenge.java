@@ -31,14 +31,14 @@ public class RC_Challenge {
     /** World is the controller class. It creates and holds all object
     references. Additionally, it defines some basic characteristics of the world
     like the size of the x,y plane and the number of obstacles. **/
-    class World {
+    private class World {
 
-		private int sizeX 					= 50;
-		private int sizeY 					= 50;
-		private int obstacleCount			= 5;
-		private Spot[][] spotGrid 			= new Spot[sizeX][sizeY];
-		private List<Obstacle> obstacles 	= new ArrayList<Obstacle>();
-		public Car car;
+		private int sizeX 					 = 50;
+		private int sizeY 					 = 50;
+		private int obstacleCount			 = 5;
+		private Spot[][] spotGrid 			 = new Spot[sizeX][sizeY];
+		private List<Obstacle> obstacles 	 = new ArrayList<Obstacle>();
+		private Car car;
 		private Interface ui;
 
 		World() {
@@ -64,12 +64,12 @@ public class RC_Challenge {
 
         private void obstacleCreate() {
 
-            for(int obstIndex = 0; obstIndex < getObstacleCount(); obstIndex++) {
+            for(int obstIndex = 0; obstIndex < getObstacleCount();
+                obstIndex++) {
 
 				getObstacleList().add(new Obstacle(obstIndex));
 
 			}
-
         }
 
         private void carCreate() {
@@ -133,7 +133,7 @@ public class RC_Challenge {
 		}
 
         //Finds a non-obstacle occupied position for the car to start at.
-		public int findCarStartXPosition() {
+		private int findCarStartXPosition() {
 
 			int xPos = 0;
 			int yPos = 0;
@@ -225,7 +225,8 @@ public class RC_Challenge {
 
 				System.out.println();
 
-				System.out.println("w - forward, s - back, a - left, d - right");
+				System.out.print("w - forward, s - back, a - left, ");
+                System.out.println("d - right");
                 System.out.println("hunt - auto-pilot to find an obstacle");
 				System.out.println("exit - quit the program");
 
@@ -237,7 +238,6 @@ public class RC_Challenge {
     			System.out.flush();
 
 			}
-
 		}
 
         /** Car class is the car being manipulated by the user. The heading or
@@ -252,14 +252,14 @@ public class RC_Challenge {
         (0,0) position on the grid. So, if the selector value is 0, north is
         selected. North's value pair is {0,-1} which means it will move 0
         spaces in the X axis and move -1 in the y axis. **/
-        public class Car {
+        class Car {
 
 			private int xCoor;
 			private int yCoor;
-			private int[][] heading 	= {{0,-1},{1,0},{0,1},{-1,0}};
-			private int headingSelector = 0;
-			private Boolean isBlocked 	= false;
-			private String blockedName	= "";
+			private int[][] heading 	 = {{0,-1},{1,0},{0,1},{-1,0}};
+			private int headingSelector  = 0;
+			private Boolean isBlocked 	 = false;
+			private String blockedName	 = "";
 
 			Car(int xCoor, int yCoor) {
 
@@ -343,7 +343,7 @@ public class RC_Challenge {
 
             }
 
-			public void setXCoor(int xCoor) {
+			private void setXCoor(int xCoor) {
 
 				this.xCoor = xCoor;
 
@@ -355,7 +355,7 @@ public class RC_Challenge {
 
 			}
 
-			public void setYCoor(int yCoor) {
+			private void setYCoor(int yCoor) {
 
 				this.yCoor = yCoor;
 
@@ -398,7 +398,7 @@ public class RC_Challenge {
 				}
 			}
 
-            public void setHeadingSelector(int heading) {
+            private void setHeadingSelector(int heading) {
 
                 if(heading >= 0 && heading <= 3) {
 
@@ -407,19 +407,19 @@ public class RC_Challenge {
                 }
             }
 
-			public int getXHeading() {
+			private int getXHeading() {
 
 				return this.heading[getHeadingSelector()][0];
 
 			}
 
-			public int getYHeading() {
+			private int getYHeading() {
 
 				return this.heading[getHeadingSelector()][1];
 
 			}
 
-			public int getHeadingSelector() {
+			private int getHeadingSelector() {
 
 				return this.headingSelector;
 
@@ -453,7 +453,7 @@ public class RC_Challenge {
 
 			}
 
-			public void setIsBlocked(Boolean isBlocked) {
+			private void setIsBlocked(Boolean isBlocked) {
 
 				this.isBlocked = isBlocked;
 
@@ -471,7 +471,7 @@ public class RC_Challenge {
 
 			}
 
-			public void setBlockedName(String blockedName) {
+			private void setBlockedName(String blockedName) {
 
 				this.blockedName = blockedName;
 
@@ -510,9 +510,9 @@ public class RC_Challenge {
         that obstacles do not overlap the edge of the grid. So they are always
         placed sufficiently far away from the edge relative to their max
         size. **/
-        public class Obstacle {
+        private class Obstacle {
 
-            private int maxWidth = 5;
+            private int maxWidth  = 5;
             private int centroidX;
     	    private int centroidY;
     	    private int width;
@@ -585,7 +585,8 @@ public class RC_Challenge {
 
             	Random random = new Random();
 
-            	int bufferX = (getWidth() - 1)/2;//buffer is radius minus the centroid.
+                //buffer is radius minus the centroid.
+            	int bufferX = (getWidth() - 1)/2;
     			int bufferY = (getHeight() - 1)/2;
 
     			int centroidX = random.nextInt(getWorldSizeX() - bufferX - 1);
@@ -619,127 +620,127 @@ public class RC_Challenge {
 
 			}
 
-    		public int getCentroidX() {
+    		private int getCentroidX() {
 
     			return this.centroidX;
 
     		}
 
-    		public int getCentroidY() {
+    		private int getCentroidY() {
 
     			return this.centroidY;
 
     		}
 
-			public void setCentroidX(int centroidX) {
+			private void setCentroidX(int centroidX) {
 
 				this.centroidX = centroidX;
 
 			}
 
-			public void setCentroidY(int centroidY) {
+			private void setCentroidY(int centroidY) {
 
 				this.centroidY = centroidY;
 
 			}
 
-    		public int getWidth() {
+    		private int getWidth() {
 
     			return this.width;
 
     		}
 
-    		public int getHeight() {
+    		private int getHeight() {
 
     			return this.height;
 
     		}
 
-    		public String getName() {
+    		private String getName() {
 
     			return this.name;
 
     		}
 
-    		public void setName(String name) {
+    		private void setName(String name) {
 
     			this.name = name;
 
     		}
 
-			public int getIndex() {
+			private int getIndex() {
 
 				return this.index;
 
 			}
 
-			public void setIndex(int index) {
+			private void setIndex(int index) {
 
 				this.index = index;
 
 			}
 
-    		public void setFound() {
+    		private void setFound() {
 
     			this.found = true;
 
     		}
 
-    		public int getWBound() {
+    		private int getWBound() {
 
     			return this.wBound;
 
     		}
 
-    		public int getEBound() {
+    		private int getEBound() {
 
     			return this.eBound;
 
     		}
 
-    		public int getNBound() {
+    		private int getNBound() {
 
     			return this.nBound;
 
     		}
 
-    		public int getSBound() {
+    		private int getSBound() {
 
     			return this.sBound;
 
     		}
 
-        	public void setHeight(int height) {
+        	private void setHeight(int height) {
 
             	this.height = height;
 
         	}
 
-        	public void setWidth(int width) {
+        	private void setWidth(int width) {
 
             	this.width = width;
 
         	}
 
-        	public void setNBound(int nBound) {
+        	private void setNBound(int nBound) {
 
             	this.nBound = nBound;
 
         	}
 
-        	public void setSBound(int sBound) {
+        	private void setSBound(int sBound) {
 
             	this.sBound = sBound;
 
         	}
 
-        	public void setEBound(int eBound) {
+        	private void setEBound(int eBound) {
 
             	this.eBound = eBound;
 
         	}
 
-        	public void setWBound(int wBound) {
+        	private void setWBound(int wBound) {
 
             	this.wBound = wBound;
 
@@ -750,7 +751,6 @@ public class RC_Challenge {
                 return this.maxWidth;
 
             }
-
     	}
 
         /** Spot class represents a specific point on the grid. So, each point
@@ -758,7 +758,7 @@ public class RC_Challenge {
         Primarily, this enables the easy detection of obstacles. Any Spot that
         is the location of an Obstacle is flagged as such enabling the Car to
         check each Spot for Obstacles. **/
-    	public class Spot {
+    	private class Spot {
 
         	private boolean obstacle;
     		private String obstName;
@@ -782,7 +782,7 @@ public class RC_Challenge {
 
     		}
 
-    		public int getObstacleIndex() {
+    		private int getObstacleIndex() {
 
     			return this.obstIndex;
 
@@ -812,25 +812,25 @@ public class RC_Challenge {
 
     		}
 
-        	public void setXAddress(int x) {
+        	private void setXAddress(int x) {
 
             	this.xAddress = x;
 
         	}
 
-        	public void setYAddress(int y) {
+        	private void setYAddress(int y) {
 
             	this.yAddress = y;
 
         	}
 
-        	public int getXAddress() {
+        	private int getXAddress() {
 
             	return this.xAddress;
 
         	}
 
-        	public int getYAddress() {
+        	private int getYAddress() {
 
             	return this.yAddress;
 
