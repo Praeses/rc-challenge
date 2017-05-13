@@ -33,11 +33,11 @@ public class RC_Challenge {
     like the size of the x,y plane and the number of obstacles. **/
     private class World {
 
-		private int sizeX 					= 50;
-		private int sizeY 					= 50;
-		private int obstacleCount			= 5;
-		private Spot[][] spotGrid 			= new Spot[sizeX][sizeY];
-		private List<Obstacle> obstacles 	= new ArrayList<Obstacle>();
+		private int sizeX 					 = 50;
+		private int sizeY 					 = 50;
+		private int obstacleCount			 = 5;
+		private Spot[][] spotGrid 			 = new Spot[sizeX][sizeY];
+		private List<Obstacle> obstacles 	 = new ArrayList<Obstacle>();
 		private Car car;
 		private Interface ui;
 
@@ -256,10 +256,10 @@ public class RC_Challenge {
 
 			private int xCoor;
 			private int yCoor;
-			private int[][] heading 	= {{0,-1},{1,0},{0,1},{-1,0}};
-			private int headingSelector = 0;
-			private Boolean isBlocked 	= false;
-			private String blockedName	= "";
+			private int[][] heading 	 = {{0,-1},{1,0},{0,1},{-1,0}};
+			private int headingSelector  = 0;
+			private Boolean isBlocked 	 = false;
+			private String blockedName	 = "";
 
 			Car(int xCoor, int yCoor) {
 
@@ -512,7 +512,7 @@ public class RC_Challenge {
         size. **/
         private class Obstacle {
 
-            private int maxWidth    = 5;
+            private int maxWidth  = 5;
             private int centroidX;
     	    private int centroidY;
     	    private int width;
@@ -523,7 +523,7 @@ public class RC_Challenge {
     	    private int sBound;
     	    private int index;
     	    private String name;
-    	    private boolean found  = false;
+    	    private boolean found = false;
     	    private int foundX;
     	    private int foundY;
 
